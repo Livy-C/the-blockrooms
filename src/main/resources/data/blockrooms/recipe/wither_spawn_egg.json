@@ -1,0 +1,17 @@
+{
+    "type": "blockrooms:crafting_error",
+    "category": "misc",
+    "key": {
+        "#": [ "minecraft:soul_sand", "minecraft:soul_soil" ],
+        "X": "minecraft:wither_skeleton_skull"
+    },
+    "pattern": [
+        "XXX",
+        "###",
+        " # "
+    ],
+    "result": {
+        "count": 1,
+        "id": "minecraft:wither_spawn_egg"
+    }
+}

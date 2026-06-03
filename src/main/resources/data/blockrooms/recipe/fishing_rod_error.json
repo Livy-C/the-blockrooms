@@ -1,0 +1,17 @@
+{
+  "type": "blockrooms:crafting_error",
+  "category": "equipment",
+  "key": {
+    "#": "#c:rods/wooden",
+    "X": "#c:strings"
+  },
+  "pattern": [
+    "  X",
+    " #X",
+    "# X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:fishing_rod"
+  }
+}

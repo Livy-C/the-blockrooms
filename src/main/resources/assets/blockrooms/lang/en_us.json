@@ -1,6 +1,8 @@
 {
   "itemGroup.blockrooms": "The Blockrooms",
   "block.blockrooms.heated_iron_block": "Heated Iron Block",
+  "block.blockrooms.error_crafting_table": "Compile Error Crafting Table",
+  "block.blockrooms.stone_crafting_table": "Stone Crafting Table",
   "item.blockrooms.almond_milk_bucket": "Almond Milk Bucket",
   "item.blockrooms.ruby": "Blockrooms Ruby",
   "item.blockrooms.ruby_sword": "Blockrooms Ruby Sword",
@@ -9,7 +11,9 @@
   "item.blockrooms.ruby_axe": "Blockrooms Ruby Axe",
   "item.blockrooms.ruby_hoe": "Blockrooms Ruby Hoe",
   "item.blockrooms.ruby_spear": "Blockrooms Ruby Spear",
+  "item.blockrooms.string_axe": "String Axe",
   "key.blockrooms.noclipping": "Noclipping",
+  "container.error_crafting": "error: Compilation Error",
 
   "blockrooms.music.menu.beginning": "C418 - Beginning",
   "blockrooms.configuration.title": "The Blockrooms Configs",
@@ -17,5 +21,5 @@
   "blockrooms.configuration.section.blockrooms.common.toml.title": "The Blockrooms Configs",
   "blockrooms.configuration.items": "Item List",
   "blockrooms.configuration.ruby_trans_time": "Ruby Transforming Time",
-  "blockrooms.configuration.ruby_trans_time_comment": "The time required for emerald transform to blockrooms ruby"
+  "blockrooms.configuration.ruby_trans_time_comment": "The time required for emerald transform to blockrooms ruby (tick)"
 }

@@ -47,9 +47,15 @@ public class ModItems {
             ITEMS.registerSimpleItem("ruby_hoe", properties -> properties.hoe(ModToolMaterials.RUBY, -3.0F, 0.0F));
     public static final DeferredItem<Item> RUBY_SPEAR =
             ITEMS.registerSimpleItem("ruby_spear", properties -> properties.spear(ModToolMaterials.RUBY, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 6.5F, 5.1F, 10.0F, 4.6F));
+    public static final DeferredItem<Item> STRING_AXE =
+            ITEMS.registerSimpleItem("string_axe", properties -> properties.axe(ModToolMaterials.STRING, 0.0F, -3.2F));
 
     public static final DeferredItem<BlockItem> HEATED_IRON_BLOCK =
             ITEMS.registerSimpleBlockItem("heated_iron_block", ModBlocks.HEATED_IRON_BLOCK);
+    public static final DeferredItem<BlockItem> ERROR_CRAFTING_TABLE =
+            ITEMS.registerSimpleBlockItem("error_crafting_table", ModBlocks.ERROR_CRAFTING_TABLE);
+    public static final DeferredItem<BlockItem> STONE_CRAFTING_TABLE =
+            ITEMS.registerSimpleBlockItem("stone_crafting_table", ModBlocks.STONE_CRAFTING_TABLE);
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

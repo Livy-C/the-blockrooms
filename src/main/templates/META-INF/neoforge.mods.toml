@@ -40,7 +40,7 @@ authors="Ghtr123"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Example mod description.
+The Blockrooms Mod.
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.

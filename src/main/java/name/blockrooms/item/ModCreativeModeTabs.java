@@ -25,6 +25,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.RUBY_HOE);
                         output.accept(ModItems.RUBY_SPEAR);
                         output.accept(ModItems.HEATED_IRON_BLOCK);
+                        output.accept(ModItems.ERROR_CRAFTING_TABLE);
+                        output.accept(ModItems.STONE_CRAFTING_TABLE);
+                        output.accept(ModItems.STRING_AXE);
                     })
                     .build());
     public static void register(IEventBus eventBus) {
