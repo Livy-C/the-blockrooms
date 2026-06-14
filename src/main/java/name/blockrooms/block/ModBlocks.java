@@ -1,14 +1,16 @@
 package name.blockrooms.block;
 
 import name.blockrooms.Blockrooms;
-import name.blockrooms.block.inventory.BaseCraftingMenu;
 import name.blockrooms.block.inventory.ErrorCraftingMenu;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -35,10 +37,28 @@ public class ModBlocks {
                             .strength(2.5F).sound(SoundType.WOOD)
                             .ignitedByLava());
     public static final DeferredBlock<BaseCraftingTableBlock> STONE_CRAFTING_TABLE =
-            BLOCKS.registerBlock("stone_crafting_table",
-                    properties -> new BaseCraftingTableBlock(BaseCraftingMenu::new, properties),
+            BLOCKS.registerBlock("stone_crafting_table", BaseCraftingTableBlock::new,
                     properties -> properties.mapColor(MapColor.STONE)
                             .instrument(NoteBlockInstrument.BASEDRUM)
                             .requiresCorrectToolForDrops()
                             .strength(1.5F, 6.0F));
+    public static final DeferredBlock<DetectorTorchBlock> DETECTOR_TORCH =
+            BLOCKS.registerBlock("detector_torch",
+                    properties -> new DetectorTorchBlock(ParticleTypes.FLAME, properties),
+                    properties -> properties.noCollision()
+                            .instabreak()
+                            .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 14 : 0)
+                            .sound(SoundType.WOOD)
+                            .pushReaction(PushReaction.DESTROY));
+    public static final DeferredBlock<DetectorWallTorchBlock> DETECTOR_WALL_TORCH =
+            BLOCKS.registerBlock("detector_wall_torch",
+                    properties -> new DetectorWallTorchBlock(ParticleTypes.FLAME, properties),
+                    properties -> properties
+                            .overrideLootTable(DETECTOR_TORCH.get().getLootTable())
+                            .overrideDescription(DETECTOR_TORCH.get().getDescriptionId())
+                            .noCollision()
+                            .instabreak()
+                            .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 14 : 0)
+                            .sound(SoundType.WOOD)
+                            .pushReaction(PushReaction.DESTROY));
 }

@@ -1,6 +1,7 @@
 package name.blockrooms.block;
 
 import com.mojang.serialization.MapCodec;
+import name.blockrooms.block.inventory.BaseCraftingMenu;
 import name.blockrooms.util.TriFunction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -20,6 +21,9 @@ import org.jspecify.annotations.Nullable;
 public class BaseCraftingTableBlock extends Block {
     private final Component title;
     private final TriFunction<Integer, Inventory, ContainerLevelAccess, AbstractContainerMenu> factory;
+    public BaseCraftingTableBlock(Properties properties) {
+        this(Component.translatable("container.crafting"), BaseCraftingMenu::new, properties);
+    }
     public BaseCraftingTableBlock(TriFunction<Integer, Inventory, ContainerLevelAccess, AbstractContainerMenu> factory, Properties properties) {
         this(Component.translatable("container.crafting"), factory, properties);
     }

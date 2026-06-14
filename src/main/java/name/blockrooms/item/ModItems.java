@@ -2,12 +2,14 @@ package name.blockrooms.item;
 
 import name.blockrooms.Blockrooms;
 import name.blockrooms.block.ModBlocks;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
@@ -56,6 +58,8 @@ public class ModItems {
             ITEMS.registerSimpleBlockItem("error_crafting_table", ModBlocks.ERROR_CRAFTING_TABLE);
     public static final DeferredItem<BlockItem> STONE_CRAFTING_TABLE =
             ITEMS.registerSimpleBlockItem("stone_crafting_table", ModBlocks.STONE_CRAFTING_TABLE);
+    public static final DeferredItem<BlockItem> DETECTOR_TORCH =
+            ITEMS.registerItem("detector_torch", properties -> new StandingAndWallBlockItem(ModBlocks.DETECTOR_TORCH.get(), ModBlocks.DETECTOR_WALL_TORCH.get(), Direction.DOWN, properties));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

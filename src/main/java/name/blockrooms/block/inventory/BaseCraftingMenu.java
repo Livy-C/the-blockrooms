@@ -68,14 +68,13 @@ public class BaseCraftingMenu extends CraftingMenu {
         }
     }
 
+    public void beginPlacingRecipe() {
+        this.placingRecipe = true;
+    }
+
     @Override
     public void finishPlacingRecipe(ServerLevel level, RecipeHolder<CraftingRecipe> holder) {
         this.placingRecipe = false;
         slotChangedCraftingGrid(this, level, this.player, this.craftSlots, this.resultSlots, holder);
-    }
-
-    @Override
-    public RecipeBookType getRecipeBookType() {
-        return null;
     }
 }

@@ -3,6 +3,7 @@
   "block.blockrooms.heated_iron_block": "Heated Iron Block",
   "block.blockrooms.error_crafting_table": "Compile Error Crafting Table",
   "block.blockrooms.stone_crafting_table": "Stone Crafting Table",
+  "block.blockrooms.detector_torch": "Detector Torch",
   "item.blockrooms.almond_milk_bucket": "Almond Milk Bucket",
   "item.blockrooms.ruby": "Blockrooms Ruby",
   "item.blockrooms.ruby_sword": "Blockrooms Ruby Sword",
@@ -12,6 +13,7 @@
   "item.blockrooms.ruby_hoe": "Blockrooms Ruby Hoe",
   "item.blockrooms.ruby_spear": "Blockrooms Ruby Spear",
   "item.blockrooms.string_axe": "String Axe",
+  "item.blockrooms.detector_torch": "Detector Torch",
   "key.blockrooms.noclipping": "Noclipping",
   "container.error_crafting": "error: Compilation Error",
 

@@ -3,6 +3,8 @@
     "package": "name.blockrooms.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
+        "RecipeCraftingHolderMixin",
+        "ResultSlotInvoker",
         "ResultSlotMixin"
     ],
     "injectors": {
