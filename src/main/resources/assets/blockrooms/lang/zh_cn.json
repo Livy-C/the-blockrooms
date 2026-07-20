@@ -4,6 +4,7 @@
   "block.blockrooms.error_crafting_table": "错误工作台",
   "block.blockrooms.stone_crafting_table": "石头工作台",
   "block.blockrooms.detector_torch": "传感火把",
+  "block.blockrooms.detector_redstone_lamp": "传感红石灯",
   "item.blockrooms.almond_milk_bucket": "杏仁奶桶",
   "item.blockrooms.ruby": "块室红宝石",
   "item.blockrooms.ruby_sword": "块室红宝石剑",
@@ -14,6 +15,7 @@
   "item.blockrooms.ruby_spear": "块室红宝石矛",
   "item.blockrooms.string_axe": "线斧",
   "item.blockrooms.detector_torch": "传感火把",
+
   "key.blockrooms.noclipping": "卡出",
   "container.error_crafting": "error: Compilation Error",
 

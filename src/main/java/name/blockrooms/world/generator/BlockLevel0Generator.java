@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
-public class BlockLevel0Generator extends ChunkGenerator {
+public class BlockLevel0Generator extends BlockLevelGenerator{
     public static final MapCodec<BlockLevel0Generator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     BiomeSource.CODEC.fieldOf("biome_source").forGetter(BlockLevel0Generator::getBiomeSource)

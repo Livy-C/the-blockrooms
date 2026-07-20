@@ -6,6 +6,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
@@ -61,4 +62,12 @@ public class ModBlocks {
                             .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 14 : 0)
                             .sound(SoundType.WOOD)
                             .pushReaction(PushReaction.DESTROY));
+    public static final DeferredBlock<DetectorRedstoneLampBlock> DETECTOR_REDSTONE_LAMP_BLOCK = BLOCKS.registerBlock("detector_redstone_lamp",
+            DetectorRedstoneLampBlock::new,
+            properties -> properties
+                    .mapColor(MapColor.TERRACOTTA_ORANGE)
+                    .lightLevel(state -> state.getValue(BlockStateProperties.LIT) ? 15 : 0)
+                    .strength(0.3F)
+                    .sound(SoundType.GLASS)
+                    .isValidSpawn(Blocks::always));
 }
