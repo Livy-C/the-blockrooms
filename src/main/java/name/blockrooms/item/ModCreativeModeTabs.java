@@ -29,6 +29,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.STONE_CRAFTING_TABLE);
                         output.accept(ModItems.STRING_AXE);
                         output.accept(ModItems.DETECTOR_TORCH);
+                        output.accept(ModItems.DETECTOR_REDSTONE_LAMP);
                     })
                     .build());
     public static void register(IEventBus eventBus) {
