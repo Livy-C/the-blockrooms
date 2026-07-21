@@ -12,5 +12,7 @@ public class ModGenerators {
     public static final DeferredRegister<MapCodec<? extends ChunkGenerator>> CHUNK_GENERATORS = DeferredRegister.create(Registries.CHUNK_GENERATOR, Blockrooms.MODID);
     public static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> BL0_GENERATOR =
             CHUNK_GENERATORS.register("blocklevel0_generator", () -> BlockLevel0Generator.CODEC);
+    public static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> BL4_GENERATOR =
+            CHUNK_GENERATORS.register("blocklevel4_generator", () -> BlockLevel4Generator.CODEC);
     public static void register(IEventBus eventBus) { CHUNK_GENERATORS.register(eventBus); }
 }

@@ -2,6 +2,7 @@ package name.blockrooms.event;
 
 import name.blockrooms.Blockrooms;
 import name.blockrooms.util.FlexibleMap;
+import name.blockrooms.util.ModLevels;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -45,10 +46,10 @@ public class NoclipHandler {
 
     static {
         noclipMap.put(Level.OVERWORLD,
-                new levelWithChance(level("blocklevel0"), 0.2));
+                new levelWithChance(ModLevels.BLOCKLEVEL_0, 0.2));
         noclipMap.put(Level.OVERWORLD, Blocks.AMETHYST_BLOCK.defaultBlockState(),
                 new levelWithChance(Level.NETHER, 0.9));
-        noclipMap.put(level("blocklevel0"), Blocks.AMETHYST_BLOCK.defaultBlockState(),
+        noclipMap.put(ModLevels.BLOCKLEVEL_0, Blocks.AMETHYST_BLOCK.defaultBlockState(),
                 new levelWithChance(Level.END, 0.9));
     }
 }
