@@ -62,6 +62,9 @@ public class ModItems {
             ITEMS.registerItem("detector_torch", properties -> new StandingAndWallBlockItem(ModBlocks.DETECTOR_TORCH.get(), ModBlocks.DETECTOR_WALL_TORCH.get(), Direction.DOWN, properties));
     public static final DeferredItem<BlockItem> DETECTOR_REDSTONE_LAMP =
             ITEMS.registerSimpleBlockItem("detector_redstone_lamp", ModBlocks.DETECTOR_REDSTONE_LAMP_BLOCK);
+    public static final DeferredItem<BlockItem> QUARTZ_ELEVATOR =
+            ITEMS.registerSimpleBlockItem("quartz_elevator", ModBlocks.QUARTZ_ELEVATOR);
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

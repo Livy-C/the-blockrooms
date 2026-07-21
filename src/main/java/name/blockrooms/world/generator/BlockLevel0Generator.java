@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 
-public class BlockLevel0Generator extends BlockLevelGenerator{
+public class BlockLevel0Generator extends BaseBlockLevelGenerator {
     public static final MapCodec<BlockLevel0Generator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     BiomeSource.CODEC.fieldOf("biome_source").forGetter(BlockLevel0Generator::getBiomeSource)
@@ -89,34 +89,7 @@ public class BlockLevel0Generator extends BlockLevelGenerator{
     }
 
     @Override
-    public int getGenDepth() {
-        return 384;
-    }
-
-    @Override
-    public int getSeaLevel() {
-        return 0;
-    }
-
-    @Override
-    public int getMinY() {
-        return -64;
-    }
-
-    @Override
     public int getBaseHeight(int i, int i1, Heightmap.Types types, LevelHeightAccessor levelHeightAccessor, RandomState randomState) {
         return 0;
     }
-
-    @Override
-    public NoiseColumn getBaseColumn(int i, int i1, LevelHeightAccessor levelHeightAccessor, RandomState randomState) {
-        return null;
-    }
-
-    @Override
-    public void addDebugScreenInfo(List<String> list, RandomState randomState, BlockPos blockPos) {
-
-    }
-
-
 }

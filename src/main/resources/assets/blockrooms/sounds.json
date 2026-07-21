@@ -10,5 +10,17 @@
                 "stream": true
             }
         ]
+    },
+    "music.blockrooms.blocklevel1": {
+        "sounds": [
+            {
+                "name": "music/game/clark",
+                "stream": true
+            },
+            {
+                "name": "music/game/home",
+                "stream": true
+            }
+        ]
     }
 }

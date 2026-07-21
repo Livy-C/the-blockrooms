@@ -1,0 +1,18 @@
+{
+    "type": "blockrooms:crafting_error",
+    "category": "redstone",
+    "key": {
+        "G": "minecraft:glowstone",
+        "Q": "minecraft:quartz",
+        "R": "minecraft:redstone"
+    },
+    "pattern": [
+        "QRQ",
+        "RGR",
+        "QRQ"
+    ],
+    "result": {
+        "count": 1,
+        "id": "blockrooms:detector_redstone_lamp"
+    }
+}
