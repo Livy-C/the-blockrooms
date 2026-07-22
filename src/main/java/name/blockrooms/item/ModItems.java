@@ -65,6 +65,9 @@ public class ModItems {
             ITEMS.registerSimpleBlockItem("detector_redstone_lamp", ModBlocks.DETECTOR_REDSTONE_LAMP_BLOCK);
     public static final DeferredItem<GunBowItem> GUNBOW =
             ITEMS.registerItem("gunbow", GunBowItem::new);
+    public static final DeferredItem<BlockItem> QUARTZ_ELEVATOR =
+            ITEMS.registerSimpleBlockItem("quartz_elevator", ModBlocks.QUARTZ_ELEVATOR);
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.blending.Blender;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class BlockLevel1Generator extends BlockLevelGenerator{
+public class BlockLevel1Generator extends BaseBlockLevelGenerator {
     public static final MapCodec<BlockLevel1Generator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     BiomeSource.CODEC.fieldOf("biome_source").forGetter(BlockLevel1Generator::getBiomeSource)
@@ -31,6 +31,7 @@ public class BlockLevel1Generator extends BlockLevelGenerator{
     public BlockLevel1Generator(BiomeSource biomeSource) {
         super(biomeSource);
     }
+
     @Override
     protected MapCodec<? extends ChunkGenerator> codec() {
         return CODEC;
@@ -51,48 +52,13 @@ public class BlockLevel1Generator extends BlockLevelGenerator{
     }
 
     @Override
-    public int getGenDepth() {
-        return 384;
-    }
-
-    @Override
     public CompletableFuture<ChunkAccess> fillFromNoise(Blender blender, RandomState randomState, StructureManager structureManager, ChunkAccess chunk) {
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                int worldX = chunk.getPos().getMinBlockX() + x;
-                int worldZ = chunk.getPos().getMinBlockZ() + z;
 
-                for (int y = this.getMinY(); y <= this.getGenDepth(); y++) {
-                    if (y >= 0 && y <= 4) chunk.setBlockState(new BlockPos(x, y, z), Blocks.CAVE_AIR.defaultBlockState(), Block.UPDATE_NONE);
-                    else chunk.setBlockState(new BlockPos(x, y, z), Blocks.BEDROCK.defaultBlockState(), Block.UPDATE_NONE);
-                }
-                chunk.setBlockState(new BlockPos(x, 0, z), Blocks.OAK_PLANKS.defaultBlockState(), Block.UPDATE_NONE);
-                chunk.setBlockState(new BlockPos(x, 1, z), Blocks.BROWN_CARPET.defaultBlockState(), Block.UPDATE_NONE);
-
-                if ((worldX % 5 + 5) % 5 < 2 && (worldZ % 2 + 2) % 2 == 0) {
-                    chunk.setBlockState(new BlockPos(x, 5, z), Blocks.REDSTONE_LAMP.defaultBlockState().setValue(RedstoneLampBlock.LIT, true), Block.UPDATE_ALL);
-                    chunk.setBlockState(new BlockPos(x, 6, z), Blocks.REDSTONE_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
-                }
-                else {
-                    chunk.setBlockState(new BlockPos(x, 5, z), Blocks.STONE.defaultBlockState(), Block.UPDATE_CLIENTS);
-                }
-            }
-        }
-        return CompletableFuture.completedFuture(chunk);
+        return null;
     }
 
     @Override
     public int getBaseHeight(int x, int z, Heightmap.Types type, LevelHeightAccessor level, RandomState random) {
         return 0;
-    }
-
-    @Override
-    public NoiseColumn getBaseColumn(int x, int z, LevelHeightAccessor height, RandomState random) {
-        return null;
-    }
-
-    @Override
-    public void addDebugScreenInfo(List<String> info, RandomState random, BlockPos pos) {
-
     }
 }

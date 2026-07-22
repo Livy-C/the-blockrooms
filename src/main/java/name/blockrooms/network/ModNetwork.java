@@ -11,10 +11,7 @@ public class ModNetwork {
     @SubscribeEvent
     public static void registerPayloads(final RegisterPayloadHandlersEvent event) {
         final PayloadRegistrar registrar = event.registrar("1");
-        registrar.playToServer(
-                NoclipPayload.TYPE,
-                NoclipPayload.STREAM_CODEC,
-                ServerPayloadHandler::handleNoclipping
-        );
+        registrar.playToServer(NoclipPayload.TYPE, NoclipPayload.STREAM_CODEC, NoclipPayload::handleServer);
+        registrar.playToServer(ElevatorTeleportPayload.TYPE, ElevatorTeleportPayload.STREAM_CODEC, ElevatorTeleportPayload::handleServer);
     }
 }
