@@ -18,11 +18,11 @@ public abstract class ChunkGeneratorMixin{
     @Redirect(method = "applyBiomeDecoration", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/placement/PlacedFeature;placeWithBiomeCheck(Lnet/minecraft/world/level/WorldGenLevel;Lnet/minecraft/world/level/chunk/ChunkGenerator;Lnet/minecraft/util/RandomSource;Lnet/minecraft/core/BlockPos;)Z"))
     private boolean injected(PlacedFeature instance, WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos pos) {
         if(level.getLevel().dimension().equals(ModLevels.BLOCKLEVEL_4)){
-            if (!(instance.feature().is(CaveFeatures.AMETHYST_GEODE) || instance.feature().is(MiscOverworldFeatures.LAKE_LAVA))){
-                return instance.placeWithBiomeCheck(level, generator, random, pos);
+            if (instance.feature().is(CaveFeatures.AMETHYST_GEODE) || instance.feature().is(MiscOverworldFeatures.LAKE_LAVA)){
+                return false;
             }
         }
-        return false;
+        return instance.placeWithBiomeCheck(level, generator, random, pos);
     }
 
 }
