@@ -2,10 +2,12 @@ package name.blockrooms;
 
 import name.blockrooms.block.ModBlocks;
 import name.blockrooms.block.recipe.ModRecipeTypes;
+import name.blockrooms.entity.ModEntities;
 import name.blockrooms.event.NoclipHandler;
 import name.blockrooms.event.RubyTransHandler;
 import name.blockrooms.item.ModCreativeModeTabs;
 import name.blockrooms.item.ModItems;
+import name.blockrooms.item.data_components.ModDataComponents;
 import name.blockrooms.sounds.ModSounds;
 import name.blockrooms.world.generator.ModGenerators;
 import org.slf4j.Logger;
@@ -35,7 +37,8 @@ public class Blockrooms {
         ModCreativeModeTabs.register(modEventBus);
         ModSounds.register(modEventBus);
         ModGenerators.register(modEventBus);
-
+        ModDataComponents.register(modEventBus);
+        ModEntities.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         // Register ourselves for server and other game events we are interested in.

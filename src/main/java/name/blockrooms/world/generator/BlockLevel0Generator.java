@@ -69,12 +69,12 @@ public class BlockLevel0Generator extends BaseBlockLevelGenerator {
 
     @Override
     public void buildSurface(WorldGenRegion worldGenRegion, StructureManager structureManager, RandomState randomState, ChunkAccess chunk) {
-        for (int x = 0; x <= 16; x++) {
-            for (int z = 0; z <= 16; z++) {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
                 int worldX = chunk.getPos().getMinBlockX() + x;
                 int worldZ = chunk.getPos().getMinBlockZ() + z;
 
-                if (new Random(worldGenRegion.getSeed() ^ (worldX * 0x9e3779b97f4a7c15L) ^ (worldZ * 0xdefacedddeedbeefL)).nextDouble() <= 0.3) {
+                if (new Random(worldGenRegion.getSeed() ^ (worldX * 0x9e3779b97f4a7c15L) ^ (worldZ * 0xdefacedddeedbeefL)).nextDouble() <= 0.2) {
                     for (int y = 1; y <= 4; y++) {
                         chunk.setBlockState(new BlockPos(x, y, z), Blocks.CHISELED_SANDSTONE.defaultBlockState(), Block.UPDATE_SUPPRESS_DROPS);
                     }

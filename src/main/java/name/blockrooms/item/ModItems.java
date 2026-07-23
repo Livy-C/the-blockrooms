@@ -2,6 +2,7 @@ package name.blockrooms.item;
 
 import name.blockrooms.Blockrooms;
 import name.blockrooms.block.ModBlocks;
+import name.blockrooms.item.impl.GunBowItem;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -62,6 +63,8 @@ public class ModItems {
             ITEMS.registerItem("detector_torch", properties -> new StandingAndWallBlockItem(ModBlocks.DETECTOR_TORCH.get(), ModBlocks.DETECTOR_WALL_TORCH.get(), Direction.DOWN, properties));
     public static final DeferredItem<BlockItem> DETECTOR_REDSTONE_LAMP =
             ITEMS.registerSimpleBlockItem("detector_redstone_lamp", ModBlocks.DETECTOR_REDSTONE_LAMP_BLOCK);
+    public static final DeferredItem<GunBowItem> GUNBOW =
+            ITEMS.registerItem("gunbow", GunBowItem::new);
     public static final DeferredItem<BlockItem> QUARTZ_ELEVATOR =
             ITEMS.registerSimpleBlockItem("quartz_elevator", ModBlocks.QUARTZ_ELEVATOR);
 
