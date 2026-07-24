@@ -7,7 +7,6 @@ import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
-import net.minecraft.world.level.levelgen.structure.StructureType;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,7 +26,7 @@ public class StructureManagerMixin {
     private void filter(SectionPos sectionPos, Structure structure, CallbackInfoReturnable<List<StructureStart>> cir){
         if(level instanceof WorldGenLevel l){
             if(l.getLevel().dimension().equals(ModLevels.BLOCKLEVEL_4)){
-                cir.setReturnValue(cir.getReturnValue().stream().filter(structureStart -> structureStart.getStructure().type().equals(StructureType.JIGSAW)).toList());
+
             }
         }
     }

@@ -1,5 +1,7 @@
 package name.blockrooms.item.impl;
 
+import name.blockrooms.entity.BlockProjectile;
+import name.blockrooms.entity.UndamagedThrownEnderpearl;
 import name.blockrooms.item.data_components.ModDataComponents;
 import name.blockrooms.util.ItemList;
 import net.minecraft.server.level.ServerLevel;
@@ -14,10 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
-import net.minecraft.world.item.ArrowItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
@@ -99,8 +98,27 @@ public class GunBowItem extends Item {
                     gunbow,
                     p_360045_ -> shootProjectile(player, p_360045_, 1, velocity, inaccuracy, f4, null)
             );
-            ammo.shrink(1);
+
+        } else if(ammo.getItem() instanceof EnderpearlItem){
+            float velocity = 3.5f, inaccuracy = 0.0f, f4 = 0.0f;
+            Projectile projectile = new UndamagedThrownEnderpearl(level, player, ammo);
+            Projectile.spawnProjectile(
+                    projectile,
+                    level,
+                    gunbow,
+                    p_360045_ -> shootProjectile(player, p_360045_, 1, velocity, inaccuracy, f4, null)
+            );
+        } else if(ammo.getItem() instanceof BlockItem bi){
+            float velocity = 2.5f, inaccuracy = 0.0f, f4 = 0.0f;
+            Projectile projectile = BlockProjectile.of(level, player, bi.getBlock().defaultBlockState());
+            Projectile.spawnProjectile(
+                    projectile,
+                    level,
+                    gunbow,
+                    p_360045_ -> shootProjectile(player, p_360045_, 1, velocity, inaccuracy, f4, null)
+            );
         }
+        ammo.shrink(1);
     }
     protected Projectile createArrow(Level level, LivingEntity shooter, ItemStack weapon, ItemStack ammo, boolean isCrit) {
         ArrowItem arrowitem = ammo.getItem() instanceof ArrowItem arrowitem1 ? arrowitem1 : (ArrowItem)Items.ARROW;
