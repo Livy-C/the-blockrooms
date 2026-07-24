@@ -1,6 +1,6 @@
 package name.blockrooms.item.impl;
 
-import name.blockrooms.item.data_components.ModDataComponents;
+import name.blockrooms.item.components.ModDataComponents;
 import name.blockrooms.util.ItemList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
