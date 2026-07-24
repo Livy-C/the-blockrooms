@@ -1,4 +1,4 @@
-package name.blockrooms.item.data_components;
+package name.blockrooms.item.components;
 
 import name.blockrooms.Blockrooms;
 import net.minecraft.core.component.DataComponentType;

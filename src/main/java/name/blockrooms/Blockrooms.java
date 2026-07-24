@@ -3,11 +3,12 @@ package name.blockrooms;
 import name.blockrooms.block.ModBlocks;
 import name.blockrooms.block.recipe.ModRecipeTypes;
 import name.blockrooms.entity.ModEntities;
+import name.blockrooms.event.BlockLevel4Handler;
 import name.blockrooms.event.NoclipHandler;
 import name.blockrooms.event.RubyTransHandler;
 import name.blockrooms.item.ModCreativeModeTabs;
 import name.blockrooms.item.ModItems;
-import name.blockrooms.item.data_components.ModDataComponents;
+import name.blockrooms.item.components.ModDataComponents;
 import name.blockrooms.sounds.ModSounds;
 import name.blockrooms.world.generator.ModGenerators;
 import org.slf4j.Logger;
@@ -48,6 +49,7 @@ public class Blockrooms {
 
         NeoForge.EVENT_BUS.register(new RubyTransHandler());
         NeoForge.EVENT_BUS.register(new NoclipHandler());
+        NeoForge.EVENT_BUS.register(new BlockLevel4Handler());
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

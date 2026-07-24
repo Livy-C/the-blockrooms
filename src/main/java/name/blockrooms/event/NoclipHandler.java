@@ -1,10 +1,7 @@
 package name.blockrooms.event;
 
-import name.blockrooms.Blockrooms;
 import name.blockrooms.util.FlexibleMap;
 import name.blockrooms.util.ModLevels;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -14,17 +11,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class NoclipHandler {
     public record levelWithChance(ResourceKey<Level> level, double chance) {}
     private static final FlexibleMap<ResourceKey<Level>, BlockState, levelWithChance> noclipMap = new FlexibleMap<>();
-    private static ResourceKey<Level> level(String key) {
-        return ResourceKey.create(Registries.DIMENSION, Identifier.fromNamespaceAndPath(Blockrooms.MODID, key));
-    }
     @SuppressWarnings("UnusedReturnValue")
     private static boolean teleportPlayer(ServerPlayer player, ResourceKey<Level> level, double x, double y, double z) {
-        return player.teleportTo(player.level().getServer().getLevel(level), x, y, z, Set.of(), player.getYRot(), player.getXRot(), true);
+        return player.teleportTo(Objects.requireNonNull(player.level().getServer().getLevel(level)), x, y, z, Set.of(), player.getYRot(), player.getXRot(), true);
     }
 
     public static void noclipByCondition(ServerPlayer player, BlockState state) {
@@ -50,6 +45,6 @@ public class NoclipHandler {
         noclipMap.put(Level.OVERWORLD, Blocks.AMETHYST_BLOCK.defaultBlockState(),
                 new levelWithChance(Level.NETHER, 0.9));
         noclipMap.put(ModLevels.BLOCKLEVEL_0, Blocks.AMETHYST_BLOCK.defaultBlockState(),
-                new levelWithChance(Level.END, 0.9));
+                new levelWithChance(ModLevels.BLOCKLEVEL_4, 0.9));
     }
 }
