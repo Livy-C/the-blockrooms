@@ -20,6 +20,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.Consumables;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.consume_effects.ClearAllStatusEffectsConsumeEffect;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -111,6 +112,21 @@ public class ModItems {
             ITEMS.registerSimpleBlockItem("fallable_stone", ModBlocks.FALLABLE_STONE);
 
     public static final DeferredItem<Item> STICK_BUNDLE = ITEMS.registerSimpleItem("stick_bundle", properties -> properties);
+
+    public static final DeferredItem<Item> SOUL_ALLOY_INGOT = ITEMS.registerSimpleItem("soul_alloy_ingot");
+    public static final DeferredItem<Item> SOUL_ALLOY_STICK = ITEMS.registerSimpleItem("soul_alloy_stick");
+    public static final DeferredItem<Item> SOUL_ALLOY_PICKAXE =
+            ITEMS.registerSimpleItem("soul_alloy_pickaxe", properties -> properties.pickaxe(ModToolMaterials.SOUL, 1.0F, -2.8F));
+
+    public static final DeferredItem<Item> HEAT_INSULATION_HELMET =
+            ITEMS.registerSimpleItem("heat_insulation_helmet", properties -> properties.humanoidArmor(ModArmorMaterials.HEAT_INSULATION, ArmorType.HELMET));
+    public static final DeferredItem<Item> HEAT_INSULATION_CHESTPLATE =
+            ITEMS.registerSimpleItem("heat_insulation_chestplate", properties -> properties.humanoidArmor(ModArmorMaterials.HEAT_INSULATION, ArmorType.CHESTPLATE));
+    public static final DeferredItem<Item> HEAT_INSULATION_LEGGINGS =
+            ITEMS.registerSimpleItem("heat_insulation_leggings", properties -> properties.humanoidArmor(ModArmorMaterials.HEAT_INSULATION, ArmorType.LEGGINGS));
+    public static final DeferredItem<Item> HEAT_INSULATION_BOOTS =
+            ITEMS.registerSimpleItem("heat_insulation_boots", properties -> properties.humanoidArmor(ModArmorMaterials.HEAT_INSULATION, ArmorType.BOOTS));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

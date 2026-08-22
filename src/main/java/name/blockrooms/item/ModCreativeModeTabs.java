@@ -37,6 +37,13 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SOFT_COBBLESTONE);
                         output.accept(ModItems.PROCESSED_SOFT_COBBLESTONE);
                         output.accept(ModItems.STICK_BUNDLE);
+                        output.accept(ModItems.SOUL_ALLOY_INGOT);
+                        output.accept(ModItems.SOUL_ALLOY_STICK);
+                        output.accept(ModItems.SOUL_ALLOY_PICKAXE);
+                        output.accept(ModItems.HEAT_INSULATION_HELMET);
+                        output.accept(ModItems.HEAT_INSULATION_CHESTPLATE);
+                        output.accept(ModItems.HEAT_INSULATION_LEGGINGS);
+                        output.accept(ModItems.HEAT_INSULATION_BOOTS);
                         output.accept(ModItems.BLOOD_ZOMBIE_SPAWN_EGG);
                         output.accept(ModItems.BLACKSTONE_SHULKER_SPAWN_EGG);
                     })

@@ -1,0 +1,10 @@
+{
+    "generator":  {
+                      "type":  "blockrooms:blocklevel15_generator",
+                      "biome_source":  {
+                                           "type":  "minecraft:fixed",
+                                           "biome":  "blockrooms:blocklevel15"
+                                       }
+                  },
+    "type":  "blockrooms:blocklevel15"
+}

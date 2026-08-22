@@ -78,6 +78,7 @@ public class TeleportUtils {
         STANDARD_TARGET.put(ModLevels.BLOCKLEVEL_2, pos -> new Vec3(pos.x(), 1, pos.z()));
         STANDARD_TARGET.put(ModLevels.BLOCKLEVEL_3, pos -> new Vec3(pos.x(), 1, pos.z()));
         STANDARD_TARGET.put(ModLevels.BLOCKLEVEL_NULL, pos -> new Vec3(0, 1, 0));
+        STANDARD_TARGET.put(ModLevels.BLOCKLEVEL_15, pos -> new Vec3(pos.x(), 1, pos.z()));
         STANDARD_TARGET.put(ModLevels.BLOCKLEVEL_4, pos -> new Vec3(pos.x(), 64, pos.z()));
         STANDARD_TARGET.put(ModLevels.GALLERY, pos -> new Vec3(2, 1, TheGalleryGenerator.SPAWN_Z));
 

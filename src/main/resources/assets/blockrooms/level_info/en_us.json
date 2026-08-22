@@ -63,6 +63,27 @@
       "entity_color": "#f44336"
     }
   },
+  "blocklevel3": {
+    "title": "BlockLevel 3 - The Ancient Mines",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "Abandoned mine tunnels riddled with ores.", "color": "#b8b8b8" },
+      { "text": "Try going deeper - maybe you'll find a way out of here.", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class 3",
+      "title_color": "#4F3536",
+      "safe": "》Abundant resources",
+      "security": "》Extremely unstable",
+      "entity": "》Entities everywhere",
+      "safe_color": "#6C4536",
+      "security_color": "#6C4536",
+      "entity_color": "#6C4536"
+    }
+  },
   "blocklevel4": {
     "title": "BlockLevel 4 - Random Seed",
     "title_color": "#e8e8e8",
@@ -82,6 +103,48 @@
       "safe_color": "#708090",
       "security_color": "#708090",
       "entity_color": "#708090"
+    }
+  },
+  "blocklevel15": {
+    "title": "BlockLevel 15 - Tuff Gates, Endless Wastes",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "A world of endless tuff.", "color": "#b8b8b8" },
+      { "text": "Step into those portals - they may carry you high above.", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class 0",
+      "title_color": "#999999",
+      "safe": "》No entities",
+      "security": "》Fully explored",
+      "entity": "》Scarce resources",
+      "safe_color": "#999999",
+      "security_color": "#999999",
+      "entity_color": "#999999"
+    }
+  },
+  "blocklevel_null": {
+    "title": "BlockLevel Null - The Null Room",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "A stone platform adrift in the void - absolute solitude, nothing but silence.", "color": "#b8b8b8" },
+      { "text": "The barrel at its center keeps refilling with Almond Milk - but linger too long, and emptiness seeps into your mind.", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class 4E",
+      "title_color": "#8899AA",
+      "safe": "》Absolute solitude",
+      "security": "》Few safe exits",
+      "entity": "》Mental hazard",
+      "safe_color": "#445566",
+      "security_color": "#445566",
+      "entity_color": "#445566"
     }
   },
   "the_gallery": {

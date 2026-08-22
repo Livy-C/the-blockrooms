@@ -19,7 +19,6 @@ public class EnhancedSkeleton extends Skeleton {
 
     @Override
     public void tick() {
-
         super.tick();
     }
 }

@@ -1,0 +1,20 @@
+{
+  "type": "blockrooms:crafting_error",
+  "key": {
+    "#": "minecraft:gold_ingot",
+    "X": "minecraft:iron_ingot",
+    "A": "minecraft:wither_rose",
+    "B": "minecraft:bone_block",
+    "C": "blockrooms:heated_iron_block",
+    "D": "minecraft:copper_ingot"
+  },
+  "pattern": [
+    "XX#",
+    "DDA",
+    "BBC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "blockrooms:soul_alloy_ingot"
+  }
+}

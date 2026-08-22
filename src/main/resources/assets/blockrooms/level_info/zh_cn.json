@@ -54,13 +54,34 @@
     "hold_ticks": 80,
     "difficulty": {
       "title": "Class 3",
-      "title_color": "#f44336",
+      "title_color": "#4F3536",
       "safe": "》不安全",
       "security": "》不稳定",
       "entity": "》实体数量较多",
-      "safe_color": "#ff9800",
-      "security_color": "#ff9800",
-      "entity_color": "#f44336"
+      "safe_color": "#6C4536",
+      "security_color": "#6C4536",
+      "entity_color": "#6C4536"
+    }
+  },
+  "blocklevel3": {
+    "title": "BlockLevel 3 - 远古矿道",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "遍布矿石的废弃矿道。", "color": "#b8b8b8" },
+      { "text": "尝试下行，也许能探索到脱离此处的缺口。", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class 3",
+      "title_color": "#4F3536",
+      "safe": "》大量物资",
+      "security": "》极其不稳定",
+      "entity": "》实体横行",
+      "safe_color": "#6C4536",
+      "security_color": "#6C4536",
+      "entity_color": "#6C4536"
     }
   },
   "blocklevel4": {
@@ -82,6 +103,48 @@
       "safe_color": "#708090",
       "security_color": "#708090",
       "entity_color": "#708090"
+    }
+  },
+  "blocklevel15": {
+    "title": "BlockLevel 15 - 凝灰门，遍旷野",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "一片由无限的凝灰岩构成的世界。", "color": "#b8b8b8" },
+      { "text": "尝试走进那些传送门，可能可以把你送到高处。", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class 0",
+      "title_color": "#999999",
+      "safe": "》怪物绝迹",
+      "security": "》勘探完全",
+      "entity": "》物资稀少",
+      "safe_color": "#999999",
+      "security_color": "#999999",
+      "entity_color": "#999999"
+    }
+  },
+  "blocklevel_null": {
+    "title": "BlockLevel Null - 空值之室",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "孤悬于虚空之上的石头平台，绝对孤独，唯有沉寂。", "color": "#b8b8b8" },
+      { "text": "中心的木桶永远刷新着杏仁奶桶——但停留过久，空虚会渗入脑海。", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class 4E",
+      "title_color": "#8899AA",
+      "safe": "》绝对孤独",
+      "security": "》极少安全出口",
+      "entity": "》精神危害",
+      "safe_color": "#445566",
+      "security_color": "#445566",
+      "entity_color": "#445566"
     }
   },
   "the_gallery": {

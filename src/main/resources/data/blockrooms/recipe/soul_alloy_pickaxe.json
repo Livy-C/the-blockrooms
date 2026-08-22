@@ -1,0 +1,17 @@
+{
+  "type": "blockrooms:crafting_error",
+  "category": "equipment",
+  "key": {
+    "I": "blockrooms:soul_alloy_ingot",
+    "S": "blockrooms:soul_alloy_stick"
+  },
+  "pattern": [
+    "I I",
+    "ISI",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "blockrooms:soul_alloy_pickaxe"
+  }
+}

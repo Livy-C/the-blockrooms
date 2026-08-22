@@ -1,0 +1,15 @@
+{
+  "type": "blockrooms:crafting_error",
+  "category": "misc",
+  "key": {
+    "I": "blockrooms:soul_alloy_ingot"
+  },
+  "pattern": [
+    "I",
+    "I"
+  ],
+  "result": {
+    "count": 1,
+    "id": "blockrooms:soul_alloy_stick"
+  }
+}

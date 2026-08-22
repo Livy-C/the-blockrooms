@@ -72,6 +72,18 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
     private static final Identifier TPL_CROSSROADS = Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_crossroads");
     private static final Identifier TPL_DEAD_END = Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_deadend");
 
+    /** 特殊房间模板（12×12×7，居中放置，不旋转）：宝藏房/红热铁块机器/骷髅房/封锁出口/模型房 */
+    public static final Identifier TPL_HEAT_MACHINE = Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_heating_iron_block_machine");
+    private static final Identifier[] SPECIAL_TEMPLATES = {
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_treasure_rooms"),
+            TPL_HEAT_MACHINE,
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_skeleton"),
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_blocked_exit"),
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_model_rooms")
+    };
+    /** 特殊房间在 16×16 区块内的偏移（12×12 居中） */
+    private static final int SPECIAL_OFFSET = 2;
+
     public static final MapCodec<BlockLevel2Generator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
                     BiomeSource.CODEC.fieldOf("biome_source").forGetter(BlockLevel2Generator::getBiomeSource)
@@ -111,9 +123,15 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
         boolean west = edgeOpen(seed, cp.x, cp.z, Direction.WEST);
 
         int count = (north ? 1 : 0) + (east ? 1 : 0) + (south ? 1 : 0) + (west ? 1 : 0);
+
+        // 特殊房间：约 1/12 区块替换普通模板（12×12×7，居中放置，不旋转）
         Identifier tpl;
         Rotation rotation = Rotation.NONE;
-        switch (count) {
+        boolean special = hashChunk(seed, cp.x, cp.z) % 12 == 0;
+        if (special) {
+            tpl = SPECIAL_TEMPLATES[(int) ((hashChunk(seed, cp.x, cp.z) >>> 8) % SPECIAL_TEMPLATES.length)];
+        } else {
+            switch (count) {
             case 4 -> tpl = TPL_CROSSROADS;
             case 3 -> {
                 tpl = TPL_TJUNCTION;
@@ -141,6 +159,7 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
                 int d = Math.floorMod(hashChunk(seed, cp.x, cp.z), 4);
                 rotation = Rotation.values()[Math.floorMod(d - 3, 4)];
             }
+            }
         }
 
         StructureTemplate template;
@@ -150,6 +169,10 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
             Blockrooms.LOGGER.error("BL2-TPL: chunk {} failed to load template {}: {}", cp, tpl, e.toString());            template = null;
         }
         BlockPos origin = new BlockPos(cp.getMinBlockX(), 0, cp.getMinBlockZ());
+        if (special) {
+            // 特殊房间 12×12 居中于 16×16 区块
+            origin = origin.offset(SPECIAL_OFFSET, 0, SPECIAL_OFFSET);
+        }
         if (template == null) {
             // 模板缺失（尚未搭建/文件名不符）：实心石砖保底，避免玩家掉进虚空
             Blockrooms.LOGGER.warn("BL2-TPL: chunk {} template {} not found -> solid fallback", cp, tpl);
@@ -222,6 +245,24 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
         long h = seed ^ (chunkX * 0x9E3779B97F4A7C15L) ^ (chunkZ * 0xBF58476D1CE4E5B9L);
         h = (h ^ (h >>> 33)) * 0x94D049BB133111EBL;
         return h ^ (h >>> 29);
+    }
+
+    /**
+     * 该区块是否生成红热铁块机器特殊房间。与 {@link #placeWorldTemplate} 使用同一哈希判定，
+     * 因此无需记录生成位置：任何时刻重算结果都与实际世界一致（重启/未加载区块均成立）。
+     */
+    public static boolean isHeatMachineChunk(long seed, int chunkX, int chunkZ) {
+        long h = hashChunk(seed, chunkX, chunkZ);
+        if (h % 12 != 0) {
+            return false;
+        }
+        Identifier tpl = SPECIAL_TEMPLATES[(int) ((h >>> 8) % SPECIAL_TEMPLATES.length)];
+        return tpl.equals(TPL_HEAT_MACHINE);
+    }
+
+    /** 机器房间中心：12×12 特殊房间居中于 16×16 区块 → 恰为区块中心（y=0） */
+    public static BlockPos heatMachineCenter(int chunkX, int chunkZ) {
+        return new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8);
     }
 
     /** 模板内的箱子/潜影盒统一写入 BL2 战利品表；空隧道列按哈希小概率补生成物资容器 */
