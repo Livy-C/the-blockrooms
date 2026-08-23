@@ -2,6 +2,7 @@ package name.blockrooms;
 
 import name.blockrooms.client.hud.DifficultyLayer;
 import name.blockrooms.client.hud.LevelInfoLayer;
+import name.blockrooms.client.hud.TemperatureSensorLayer;
 import name.blockrooms.client.renderer.BlackstoneShulkerRenderer;
 import name.blockrooms.client.renderer.BlockProjectileRenderer;
 import name.blockrooms.client.renderer.BloodZombieRenderer;
@@ -49,6 +50,9 @@ public class BlockroomsClient {
         event.registerAboveAll(
                 Identifier.fromNamespaceAndPath(Blockrooms.MODID, "level_difficulty"),
                 DifficultyLayer.instance());
+        event.registerAboveAll(
+                Identifier.fromNamespaceAndPath(Blockrooms.MODID, "temperature_sensor"),
+                TemperatureSensorLayer.instance());
     }
 
     @SubscribeEvent

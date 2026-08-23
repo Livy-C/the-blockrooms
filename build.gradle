@@ -23,6 +23,9 @@ repositories {
     maven { url = "https://neoforge.forgecdn.net/releases" }
     maven { url = "https://neoforge.forgecdn.net/mojang-meta" }
     maven { url = "https://maven.blamejared.com" }
+    maven {
+        url = "https://cursemaven.com"
+    }
 }
 
 base {
@@ -121,7 +124,10 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
-
+    compileOnly "curse.maven:tough-as-nails-246391:7671915"
+    localRuntime "curse.maven:tough-as-nails-246391:7671915"
+    compileOnly "curse.maven:glitchcore-955399:7720796"
+    localRuntime "curse.maven:glitchcore-955399:7720796"
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"

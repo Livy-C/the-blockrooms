@@ -19,62 +19,15 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Loads the level info panel content from data-driven, lang-style JSON files,
- * so that no level text is hardcoded in Java. Files live at
- * {@code assets/blockrooms/level_info/<language>.json} (e.g. {@code en_us.json},
- * {@code zh_cn.json}) and each contains one entry per level, keyed by the level
- * path (e.g. {@code blocklevel0}). The file matching the client's language is
- * used, falling back to {@code en_us.json} when missing. Players can override
- * or add entries with a resource pack.
- *
- * <p>Supported schema:</p>
- * <pre>
- * {
- *   "blocklevel0": {
- *     "title": "Level 0",              // optional heading, null/blank to skip
- *     "title_color": "#e8e8e8",        // optional, hex: #rrggbb / 0xrrggbb / rrggbb
- *     "lines": [                        // optional body lines
- *       { "text": "A line", "color": "#b0b0b0" },
- *       "a plain string line also works"
- *     ],
- *     "type_speed": 2,                 // optional, ticks per char (1-20), default from config
- *     "line_delay": 12,                // optional, ticks between lines (0-200), default from config
- *     "hold_ticks": 80,                // optional, ticks after last line (0-600), default from config
- *     "difficulty": {                   // optional survival difficulty (top-right panel)
- *       "title": "Survival Difficulty",
- *       "title_color": "#ffffff",      // optional title color
- *       "safe": "Safe",
- *       "security": "Secure",
- *       "entity": "Minimal entity count",
- *       "safe_color": "#4caf50",       // optional item colors
- *       "security_color": "#ffc107",
- *       "entity_color": "#f44336"
- *     }
- *   },
- *   "blocklevel1": { ... }
- * }
- * </pre>
- *
- * <p>All fields are optional. A missing or unparsable file simply means
- * nothing is shown for that dimension.</p>
- */
 public final class LevelInfoManager {
-    /** Fallback language file used when the client's language has no file. */
     public static final String DEFAULT_LANGUAGE = "en_us";
 
     private LevelInfoManager() {
     }
-
-    /**
-     * Returns the level info for the given dimension in the client's language
-     * (falling back to {@value #DEFAULT_LANGUAGE}), if an entry exists and
-     * parses successfully.
-     */
     public static Optional<LevelInfoData> get(ResourceKey<Level> dimension) {
         String clientLang = Minecraft.getInstance().options.languageCode;
         Set<String> candidates = new LinkedHashSet<>();
-        if (clientLang != null && !clientLang.isBlank()) {
+        if (!clientLang.isBlank()) {
             candidates.add(clientLang);
         }
         candidates.add(DEFAULT_LANGUAGE);
@@ -167,8 +120,6 @@ public final class LevelInfoManager {
     private static String stringOrNull(JsonObject o, String key) {
         return o.has(key) && o.get(key).isJsonPrimitive() ? o.get(key).getAsString() : null;
     }
-
-    /** Parses "#rrggbb", "0xrrggbb" or "rrggbb" into an opaque ARGB int. */
     private static int parseColor(String value, int fallback) {
         try {
             String hex = value.trim();
@@ -185,6 +136,6 @@ public final class LevelInfoManager {
     }
 
     private static int clamp(int value, int min, int max) {
-        return Math.max(min, Math.min(max, value));
+        return Math.clamp(value, min, max);
     }
 }

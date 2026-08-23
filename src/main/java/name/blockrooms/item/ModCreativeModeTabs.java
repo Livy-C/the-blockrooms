@@ -37,6 +37,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SOFT_COBBLESTONE);
                         output.accept(ModItems.PROCESSED_SOFT_COBBLESTONE);
                         output.accept(ModItems.STICK_BUNDLE);
+                        output.accept(ModItems.TEMPERATURE_SENSOR);
                         output.accept(ModItems.SOUL_ALLOY_INGOT);
                         output.accept(ModItems.SOUL_ALLOY_STICK);
                         output.accept(ModItems.SOUL_ALLOY_PICKAXE);

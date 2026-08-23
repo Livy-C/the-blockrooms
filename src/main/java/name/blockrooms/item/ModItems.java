@@ -113,6 +113,9 @@ public class ModItems {
 
     public static final DeferredItem<Item> STICK_BUNDLE = ITEMS.registerSimpleItem("stick_bundle", properties -> properties);
 
+    public static final DeferredItem<Item> TEMPERATURE_SENSOR =
+            ITEMS.registerItem("temperature_sensor", TemperatureSensorItem::new, properties -> properties);
+
     public static final DeferredItem<Item> SOUL_ALLOY_INGOT = ITEMS.registerSimpleItem("soul_alloy_ingot");
     public static final DeferredItem<Item> SOUL_ALLOY_STICK = ITEMS.registerSimpleItem("soul_alloy_stick");
     public static final DeferredItem<Item> SOUL_ALLOY_PICKAXE =

@@ -33,8 +33,6 @@ public final class LevelInfoLayer implements GuiLayer {
     }
 
     private enum Phase { TYPING, WAITING, HOLDING, FADING }
-
-    /** One visual row: pauseBefore means wait {@code lineDelay} ticks before typing it. */
     private record Row(String text, int color, boolean pauseBefore) {
     }
 
@@ -92,7 +90,6 @@ public final class LevelInfoLayer implements GuiLayer {
         offset = clamp(offset + deltaRows, 0, maxOffset());
     }
 
-    /** Advances the typewriter state machine. Called once per client tick. */
     public void tick() {
         if (!active) {
             return;
@@ -179,9 +176,7 @@ public final class LevelInfoLayer implements GuiLayer {
         int textX = x + PADDING_X;
         int textY = y + PADDING_Y;
         int visible = Math.min(visibleRows, rows.size() - offset);
-        // Never draw rows the typewriter has not reached yet: rows after
-        // rowIndex would otherwise flash in full before their turn.
-        int drawn = Math.max(0, Math.min(visible, rowIndex + 1 - offset));
+        int drawn = Math.clamp(visible, 0, rowIndex + 1 - offset);
         for (int i = 0; i < drawn; i++) {
             int row = offset + i;
             Row r = rows.get(row);
@@ -241,8 +236,8 @@ public final class LevelInfoLayer implements GuiLayer {
         boolean firstRow = true;
         if (data.hasTitle()) {
             List<String> pieces = wrap(font, data.title(), wrapWidth);
-            for (int i = 0; i < pieces.size(); i++) {
-                result.add(new Row(pieces.get(i), data.titleColor(), !firstRow && i == 0));
+            for (String piece : pieces) {
+                result.add(new Row(piece, data.titleColor(), false));
                 firstRow = false;
             }
         }
@@ -266,7 +261,7 @@ public final class LevelInfoLayer implements GuiLayer {
         for (int i = 0; i < text.length(); ) {
             int cp = text.codePointAt(i);
             String ch = new String(Character.toChars(cp));
-            if (!line.isEmpty() && font.width(line.toString() + ch) > maxWidth) {
+            if (!line.isEmpty() && font.width(line + ch) > maxWidth) {
                 result.add(line.toString());
                 line.setLength(0);
             }
@@ -297,6 +292,6 @@ public final class LevelInfoLayer implements GuiLayer {
     }
 
     private static int clamp(int value, int min, int max) {
-        return Math.max(min, Math.min(max, value));
+        return Math.clamp(value, min, max);
     }
 }

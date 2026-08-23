@@ -81,7 +81,7 @@ public final class DifficultyLayer implements GuiLayer {
         int textY = y + PADDING_Y;
         for (int i = 0; i < texts.size(); i++) {
             guiGraphics.drawString(font, Component.literal(texts.get(i)), x + PADDING_X, textY,
-                    colors.get(i), true);
+                    colors.get(i) | 0xFF000000, true);
             textY += lineHeight;
         }
     }

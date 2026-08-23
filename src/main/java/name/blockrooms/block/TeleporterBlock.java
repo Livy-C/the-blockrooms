@@ -68,7 +68,7 @@ public class TeleporterBlock extends Block implements EntityBlock {
         if (targets.isEmpty()) {
             return;
         }
-        TeleporterBlockEntity.Target target = targets.get(0);
+        TeleporterBlockEntity.Target target = targets.getFirst();
         ServerLevel targetLevel = serverLevel.getServer().getLevel(target.dimension());
         if (targetLevel == null) {
             return;

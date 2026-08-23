@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import name.blockrooms.block.ModBlocks;
 import name.blockrooms.block.entity.ModBlockEntities;
 import name.blockrooms.block.recipe.ModRecipeTypes;
+import name.blockrooms.compat.TanTemperatureCompat;
 import name.blockrooms.effect.ModMobEffects;
 import name.blockrooms.entity.BloodZombie;
 import name.blockrooms.entity.EnhancedSkeleton;
@@ -11,6 +12,7 @@ import name.blockrooms.entity.ModEntities;
 import name.blockrooms.item.ModCreativeModeTabs;
 import name.blockrooms.item.ModItems;
 import name.blockrooms.item.components.ModDataComponents;
+import name.blockrooms.network.TemperaturePayload;
 import name.blockrooms.sounds.ModSounds;
 import name.blockrooms.world.generator.ModGenerators;
 import name.blockrooms.world.structure.ModStructures;
@@ -18,6 +20,7 @@ import net.minecraft.world.entity.monster.Shulker;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -27,6 +30,8 @@ import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.slf4j.Logger;
 
 @Mod(Blockrooms.MODID)
@@ -39,6 +44,7 @@ public class Blockrooms {
         modEventBus.addListener(this::registerPlacements);
         modEventBus.addListener(this::registerEntityAttributes);
         modEventBus.addListener(this::addPackFinders);
+        modEventBus.addListener(this::registerPayloads);
 
         ModMobEffects.register(modEventBus);
         ModRecipeTypes.register(modEventBus);
@@ -57,6 +63,10 @@ public class Blockrooms {
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        // Tough As Nails（意志坚定）温度兼容：仅在 TAN 已加载时注册
+        if (ModList.get().isLoaded("toughasnails")) {
+            TanTemperatureCompat.register();
+        }
     }
 
     private void registerPlacements(RegisterSpawnPlacementsEvent event){
@@ -81,6 +91,12 @@ public class Blockrooms {
     @SubscribeEvent
     public void onDatapackSync(OnDatapackSyncEvent event) {
         event.sendRecipes(ModRecipeTypes.ERROR_CRAFTING.get());
+    }
+
+    /** 温度传感器读数推送通道（服务端 → 客户端） */
+    private void registerPayloads(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar(Blockrooms.MODID);
+        registrar.playToClient(TemperaturePayload.TYPE, TemperaturePayload.STREAM_CODEC, TemperaturePayload::handle);
     }
 
 
