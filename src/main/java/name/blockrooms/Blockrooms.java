@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import name.blockrooms.block.ModBlocks;
 import name.blockrooms.block.entity.ModBlockEntities;
 import name.blockrooms.block.recipe.ModRecipeTypes;
+import name.blockrooms.compat.TanTemperatureCompat;
 import name.blockrooms.effect.ModMobEffects;
 import name.blockrooms.entity.BloodZombie;
 import name.blockrooms.entity.EnhancedSkeleton;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -58,11 +60,14 @@ public class Blockrooms {
         ModEntities.register(modEventBus);
         ModStructures.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-
+        
         NeoForge.EVENT_BUS.register(this);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
+        if (ModList.get().isLoaded("toughasnails")) {
+            TanTemperatureCompat.register();
+        }
     }
 
     private void registerPlacements(RegisterSpawnPlacementsEvent event) {

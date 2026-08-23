@@ -115,8 +115,6 @@ public class ModItems {
     public static final DeferredItem<BlockItem> FALLABLE_STONE =
             ITEMS.registerSimpleBlockItem("fallable_stone", ModBlocks.FALLABLE_STONE);
 
-    public static final DeferredItem<Item> STICK_BUNDLE = ITEMS.registerSimpleItem("stick_bundle", properties -> properties);
-
     public static final DeferredItem<Item> TEMPERATURE_SENSOR =
             ITEMS.registerItem("temperature_sensor", TemperatureSensorItem::new, properties -> properties);
 

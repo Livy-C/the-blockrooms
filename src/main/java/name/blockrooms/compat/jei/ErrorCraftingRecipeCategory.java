@@ -1,4 +1,4 @@
-package name.blockrooms.jei;
+package name.blockrooms.compat.jei;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.ICraftingGridHelper;

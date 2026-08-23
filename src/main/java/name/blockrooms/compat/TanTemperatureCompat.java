@@ -1,32 +1,27 @@
 package name.blockrooms.compat;
 
+import name.blockrooms.Blockrooms;
 import name.blockrooms.environment.BlockLevel2Temperature;
+import name.blockrooms.item.HeatInsulationArmor;
 import name.blockrooms.util.ModLevels;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import toughasnails.api.temperature.IPlayerTemperatureModifier;
 import toughasnails.api.temperature.IPositionalTemperatureModifier;
+import toughasnails.api.temperature.ITemperature;
 import toughasnails.api.temperature.TemperatureHelper;
 import toughasnails.api.temperature.TemperatureLevel;
 
-/**
- * Tough As Nails（意志坚定）温度兼容。
- * <p>
- * 通过 TAN 官方的位置温度修改器接口接入：
- * <ul>
- *   <li><b>仅 BlockLevel 2 生效</b>：把 TAN 的环境温度等级替换为 BL2 温度系统的映射——
- *       37℃ 基础 → {@link TemperatureLevel#NEUTRAL}（人体舒适温度），
- *       40~43℃ → {@link TemperatureLevel#WARM}，超过 43℃ → {@link TemperatureLevel#HOT}；
- *       机器热场与封闭空间加成通过 {@link BlockLevel2Temperature#temperatureAt} 自动体现，
- *       玩家靠近机器时 TAN 体感温度随之升高；</li>
- *   <li><b>其他维度：返回原等级</b>，TAN 保持自身的正常温度逻辑，本模组不做任何干预。</li>
- * </ul>
- * 注册入口 {@link #register()} 仅在检测到 TAN 已加载时调用（见 {@code Blockrooms.commonSetup}），
- * 未安装 TAN 时本类不会被加载。
- */
-public final class TanTemperatureCompat implements IPositionalTemperatureModifier {
+
+public final class TanTemperatureCompat implements IPositionalTemperatureModifier, IPlayerTemperatureModifier {
+    private static final int GRADIENT_INTERVAL = 10;
 
     public static void register() {
-        TemperatureHelper.registerPositionalTemperatureModifier(new TanTemperatureCompat());
+        TanTemperatureCompat compat = new TanTemperatureCompat();
+        TemperatureHelper.registerPositionalTemperatureModifier(compat);
+        TemperatureHelper.registerPlayerTemperatureModifier(compat);
+        Blockrooms.LOGGER.info("TAN: temperature compat registered");
     }
 
     @Override
@@ -42,5 +37,35 @@ public final class TanTemperatureCompat implements IPositionalTemperatureModifie
             return TemperatureLevel.WARM;
         }
         return TemperatureLevel.HOT;
+    }
+
+    @Override
+    public TemperatureLevel modify(Player player, TemperatureLevel current) {
+        int worn = HeatInsulationArmor.wornCount(player);
+        if (worn == 0) {
+            return current;
+        }
+        // 每穿一件向常温（NEUTRAL）拉近 1 级 → 目标等级
+        TemperatureLevel target = current;
+        for (int i = 0; i < worn; i++) {
+            if (target.ordinal() > TemperatureLevel.NEUTRAL.ordinal()) {
+                target = target.decrement(1);
+            } else if (target.ordinal() < TemperatureLevel.NEUTRAL.ordinal()) {
+                target = target.increment(1);
+            } else {
+                break;
+            }
+        }
+        // 平滑渐变：每 GRADIENT_INTERVAL tick 向目标移动 1 级（服务端），不瞬移
+        if (!player.level().isClientSide() && target != current && player.tickCount % GRADIENT_INTERVAL == 0) {
+            ITemperature data = TemperatureHelper.getTemperatureData(player);
+            TemperatureLevel level = data.getLevel();
+            if (level.ordinal() > target.ordinal()) {
+                data.setLevel(level.decrement(1));
+            } else if (level.ordinal() < target.ordinal()) {
+                data.setLevel(level.increment(1));
+            }
+        }
+        return target;
     }
 }

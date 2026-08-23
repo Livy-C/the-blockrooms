@@ -1,4 +1,4 @@
-package name.blockrooms.jei;
+package name.blockrooms.compat.jei;
 
 import name.blockrooms.Blockrooms;
 import net.neoforged.api.distmarker.Dist;
