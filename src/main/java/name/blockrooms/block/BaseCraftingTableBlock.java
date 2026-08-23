@@ -22,7 +22,7 @@ public class BaseCraftingTableBlock extends Block {
     private final Component title;
     private final TriFunction<Integer, Inventory, ContainerLevelAccess, AbstractContainerMenu> factory;
     public BaseCraftingTableBlock(Properties properties) {
-        this(Component.translatable("container.crafting"), BaseCraftingMenu::new, properties);
+        this(BaseCraftingMenu::new, properties);
     }
     public BaseCraftingTableBlock(TriFunction<Integer, Inventory, ContainerLevelAccess, AbstractContainerMenu> factory, Properties properties) {
         this(Component.translatable("container.crafting"), factory, properties);

@@ -18,49 +18,23 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public class ErrorCraftingShapelessRecipe extends ShapelessRecipe {
-
-    final String group;
-    final CraftingBookCategory category;
+public class ErrorCraftingShapelessRecipe extends ShapelessRecipe implements ErrorCraftingRecipe {
     final ItemStack result;
     final List<Ingredient> ingredients;
     private @Nullable PlacementInfo placementInfo;
     private final boolean isSimple;
 
-    public ErrorCraftingShapelessRecipe(String group, CraftingBookCategory category, ItemStack result, List<Ingredient> ingredients) {
-        super(group, category, result, ingredients);
-        this.group = group;
-        this.category = category;
+    public ErrorCraftingShapelessRecipe(ItemStack result, List<Ingredient> ingredients) {
+        super("error", CraftingBookCategory.MISC, result, ingredients);
         this.result = result;
         this.ingredients = ingredients;
         this.isSimple = ingredients.stream().allMatch(Ingredient::isSimple);
     }
 
-    public ItemStack resultItem() {
-        return result;
-    }
-
-    /** 1.21.11 的 ShapelessRecipe 没有 getIngredients()，这里显式暴露（供 JEI 布局等使用）。 */
-    public List<Ingredient> ingredients() {
-        return this.ingredients;
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     public RecipeSerializer<ShapelessRecipe> getSerializer() {
-        // 同 ErrorCraftingRecipe：必须返回 mod 自己的 serializer，否则网络同步时
-        // 客户端会用原版 ShapelessRecipe.Serializer 解码，配方类型退化为 minecraft:crafting
         return (RecipeSerializer<ShapelessRecipe>) (RecipeSerializer<?>) ModRecipeTypes.ERROR_CRAFTING_SHAPELESS_SERIALIZER.get();
-    }
-
-    @Override
-    public String group() {
-        return this.group;
-    }
-
-    @Override
-    public CraftingBookCategory category() {
-        return this.category;
     }
 
     @Override
@@ -72,23 +46,23 @@ public class ErrorCraftingShapelessRecipe extends ShapelessRecipe {
         return this.placementInfo;
     }
 
-    public boolean matches(CraftingInput p_346123_, Level p_44263_) {
-        if (p_346123_.ingredientCount() != this.ingredients.size()) {
+    public boolean matches(CraftingInput craftingInput, Level level) {
+        if (craftingInput.ingredientCount() != this.ingredients.size()) {
             return false;
         } else if (!isSimple) {
-            var nonEmptyItems = new java.util.ArrayList<ItemStack>(p_346123_.ingredientCount());
-            for (var item : p_346123_.items())
+            var nonEmptyItems = new java.util.ArrayList<ItemStack>(craftingInput.ingredientCount());
+            for (var item : craftingInput.items())
                 if (!item.isEmpty())
                     nonEmptyItems.add(item);
             return net.neoforged.neoforge.common.util.RecipeMatcher.findMatches(nonEmptyItems, this.ingredients) != null;
         } else {
-            return p_346123_.size() == 1 && this.ingredients.size() == 1
-                    ? this.ingredients.getFirst().test(p_346123_.getItem(0))
-                    : p_346123_.stackedContents().canCraft(this, null);
+            return craftingInput.size() == 1 && this.ingredients.size() == 1
+                    ? this.ingredients.getFirst().test(craftingInput.getItem(0))
+                    : craftingInput.stackedContents().canCraft(this, null);
         }
     }
 
-    public ItemStack assemble(CraftingInput p_345555_, HolderLookup.Provider p_335725_) {
+    public ItemStack assemble(CraftingInput craftingInput, HolderLookup.Provider provider) {
         return this.result.copy();
     }
 
@@ -105,23 +79,15 @@ public class ErrorCraftingShapelessRecipe extends ShapelessRecipe {
 
     public static class Serializer implements RecipeSerializer<ErrorCraftingShapelessRecipe> {
         private static final MapCodec<ErrorCraftingShapelessRecipe> CODEC = RecordCodecBuilder.mapCodec(
-                p_360072_ -> p_360072_.group(
-                                Codec.STRING.optionalFieldOf("group", "").forGetter(p_301127_ -> p_301127_.group),
-                                CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(p_301133_ -> p_301133_.category),
+                i -> i.group(
                                 ItemStack.STRICT_CODEC.fieldOf("result").forGetter(p_301142_ -> p_301142_.result),
                                 Codec.lazyInitialized(() -> Ingredient.CODEC.listOf(1, ShapedRecipePattern.getMaxHeight() * ShapedRecipePattern.getMaxWidth())).fieldOf("ingredients").forGetter(p_360071_ -> p_360071_.ingredients)
                         )
-                        .apply(p_360072_, ErrorCraftingShapelessRecipe::new)
+                        .apply(i, ErrorCraftingShapelessRecipe::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, ErrorCraftingShapelessRecipe> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.STRING_UTF8,
-                p_360074_ -> p_360074_.group,
-                CraftingBookCategory.STREAM_CODEC,
-                p_360073_ -> p_360073_.category,
-                ItemStack.STREAM_CODEC,
-                p_360070_ -> p_360070_.result,
-                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()),
-                p_360069_ -> p_360069_.ingredients,
+                ItemStack.STREAM_CODEC, o -> o.result,
+                Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.ingredients,
                 ErrorCraftingShapelessRecipe::new
         );
 
@@ -134,9 +100,5 @@ public class ErrorCraftingShapelessRecipe extends ShapelessRecipe {
         public StreamCodec<RegistryFriendlyByteBuf, ErrorCraftingShapelessRecipe> streamCodec() {
             return STREAM_CODEC;
         }
-    }
-    @Override
-    public RecipeType<CraftingRecipe> getType() {
-        return ModRecipeTypes.ERROR_CRAFTING.get();
     }
 }

@@ -41,7 +41,7 @@
   "container.error_crafting": "error: Compilation Error",
   "gui.in_blockrooms": "Minecraft 1.ψ.5 (1.ψ.5/The Blockrooms)",
   "blockrooms.jei.info.error_crafting_table": "A crafting table gone wrong: it accepts both vanilla and error recipes. Taking a result has a 5% chance of inflicting Nausea.",
-  "blockrooms.jei.category.error_crafting": "Error Crafting",
+  "gui.jei.category.error_crafting": "Error Crafting",
 
   "advancements.blockrooms.the_beginning.title": "The Beginning of the Blockrooms",
   "advancements.blockrooms.the_beginning.description": "When you first fall into this place…",
@@ -52,7 +52,7 @@
   "advancements.blockrooms.quartz_lobby.title": "The Quartz Lobby",
   "advancements.blockrooms.quartz_lobby.description": "This is not the Frontrooms…",
   "advancements.blockrooms.lights_out.title": "Lights Out",
-  "advancements.blockrooms.lights_out.description": "After dark…",
+  "advancements.blockrooms.lights_out.description": "After dark, in BlockLevel 1…",
   "advancements.blockrooms.abandoned_camp.title": "The Predecessors' Camp",
   "advancements.blockrooms.abandoned_camp.description": "Find an abandoned camp",
   "advancements.blockrooms.error_crafting_table.title": "An Unusual Crafting Table",
@@ -67,10 +67,10 @@
   "advancements.blockrooms.plank_making.description": "Compress a stick bundle into planks",
   "advancements.blockrooms.wooden_pickaxe.title": "Mining Time, No Ores Though",
   "advancements.blockrooms.wooden_pickaxe.description": "Craft a wooden pickaxe",
-  "advancements.blockrooms.moving_light.title": "A Moving Light",
+  "advancements.blockrooms.moving_light.title": "Dynamic Light",
   "advancements.blockrooms.moving_light.description": "Obtain a Glowstone Lantern",
   "advancements.blockrooms.gallery.title": "The Hopeless Gallery",
-  "advancements.blockrooms.gallery.description": "No-clip into The Gallery",
+  "advancements.blockrooms.gallery.description": "Noclip into The Gallery",
 
   "blockrooms.music.menu.beginning": "C418 - Beginning",
 

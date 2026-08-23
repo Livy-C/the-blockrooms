@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 
 public class ErrorCraftingMenu extends BaseCraftingMenu {
-
     public ErrorCraftingMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
         super(containerId, playerInventory, access);
     }

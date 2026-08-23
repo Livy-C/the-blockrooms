@@ -40,7 +40,7 @@
   "container.error_crafting": "error: Compilation Error",
   "gui.in_blockrooms": "Minecraft 1.ψ.5 (1.ψ.5/The Blockrooms)",
   "blockrooms.jei.info.error_crafting_table": "一块出了问题的合成台：既支持原版配方，也支持错误配方。取出合成产物时有 5% 的概率获得恶心效果。",
-  "blockrooms.jei.category.error_crafting": "错误合成",
+  "gui.jei.category.error_crafting": "错误合成",
 
   "advancements.blockrooms.the_beginning.title": "块室之始",
   "advancements.blockrooms.the_beginning.description": "当你第一次坠入这里……",
@@ -70,7 +70,9 @@
   "advancements.blockrooms.moving_light.description": "获得荧石提灯",
   "advancements.blockrooms.gallery.title": "令人绝望的画廊",
   "advancements.blockrooms.gallery.description": "切入画廊",
+
   "blockrooms.music.menu.beginning": "C418 - Beginning",
+
   "blockrooms.configuration.title": "块室模组配置",
   "blockrooms.configuration.section.blockrooms.common.toml": "配置块室模组",
   "blockrooms.configuration.section.blockrooms.common.toml.title": "配置块室模组",

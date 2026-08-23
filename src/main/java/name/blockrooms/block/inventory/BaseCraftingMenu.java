@@ -20,9 +20,6 @@ public class BaseCraftingMenu extends CraftingMenu {
     protected final ContainerLevelAccess access;
     protected final Player player;
     protected boolean placingRecipe;
-    public BaseCraftingMenu(int containerId, Inventory playerInventory) {
-        this(containerId, playerInventory, ContainerLevelAccess.NULL);
-    }
 
     public BaseCraftingMenu(int containerId, Inventory playerInventory, ContainerLevelAccess access) {
         super(containerId, playerInventory, access);
