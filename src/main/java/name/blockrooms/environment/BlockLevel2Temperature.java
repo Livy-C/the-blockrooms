@@ -12,20 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-/**
- * BlockLevel 2「隧道」温度系统。
- * <ul>
- *   <li>基础温度 <b>37℃</b>（舒适，接近人体温度）；</li>
- *   <li>红热铁块机器（"机器"，见 {@link BlockLevel2Generator#isHeatMachineChunk}）半径
- *       {@link #MACHINE_RADIUS} 格内线性升温：边缘 +4℃（41℃）→ 中心 +11℃（48℃）；</li>
- *   <li>封闭空间（死胡同/小房间，水平 4 方向中 ≥3 方向 3 格内被堵）再 +{@link #ENCLOSED_BONUS}℃
- *       （约 45℃）；</li>
- *   <li>温度超过 {@link #DAMAGE_THRESHOLD}（40℃）玩家持续流失生命，伤害间隔由温度决定
- *       （越热越频繁，见 {@link #damageInterval}）；</li>
- *   <li>隔热套装按件减免伤害（每件 {@link #PROTECTION_PER_PIECE}），穿满 4 件完全免疫。</li>
- * </ul>
- * 全部行为由 {@link Predicate}（判定）与 {@link Consumer}（执行）组成，可自由组合替换。
- */
+
 public final class BlockLevel2Temperature {
     public static final float BASE_TEMPERATURE = 37.0F;
     public static final float DAMAGE_THRESHOLD = 40.0F;

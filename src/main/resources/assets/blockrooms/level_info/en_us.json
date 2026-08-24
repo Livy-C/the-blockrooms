@@ -126,6 +126,27 @@
       "entity_color": "#999999"
     }
   },
+  "blocklevel303": {
+    "title": "BlockLevel 303 - The City of Floating Dreams",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "An endless concrete city, calm under day and night.", "color": "#b8b8b8" },
+      { "text": "Do not wander too far northwest - the void there has no end.", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class Habitable",
+      "title_color": "#4CAF50",
+      "safe": "》Safe but dangerous exits",
+      "security": "》Friendly community",
+      "entity": "》No hostile entities",
+      "safe_color": "#4CAF50",
+      "security_color": "#4CAF50",
+      "entity_color": "#4CAF50"
+    }
+  },
   "blocklevel_null": {
     "title": "BlockLevel Null - The Null Room",
     "title_color": "#e8e8e8",

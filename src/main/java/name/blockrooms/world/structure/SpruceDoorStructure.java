@@ -1,6 +1,7 @@
 package name.blockrooms.world.structure;
 
 import com.mojang.serialization.MapCodec;
+import name.blockrooms.util.ModLevels;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.ChunkPos;
@@ -37,7 +38,7 @@ public class SpruceDoorStructure extends Structure {
         // 是 minY+1..maxY（最底层留给基岩），y=0 的方块会被 box.isInside 静默丢弃。
         BlockPos anchor = new BlockPos(chunkPos.getMinBlockX() + dx, 1, chunkPos.getMinBlockZ() + dz);
         return Optional.of(new GenerationStub(anchor,
-                builder -> builder.addPiece(new BlockLevel2DoorPiece(anchor, facing, false, null))));
+                builder -> builder.addPiece(new BlockLevel2DoorPiece(anchor, facing, false, ModLevels.BLOCKLEVEL_NULL))));
     }
 
     /** 由种子+区块坐标+盐决定的稳定伪随机数。 */

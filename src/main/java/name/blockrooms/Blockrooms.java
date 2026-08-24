@@ -12,6 +12,7 @@ import name.blockrooms.entity.ModEntities;
 import name.blockrooms.item.ModCreativeModeTabs;
 import name.blockrooms.item.ModItems;
 import name.blockrooms.item.components.ModDataComponents;
+import name.blockrooms.loot.ModLootConditions;
 import name.blockrooms.network.TemperaturePayload;
 import name.blockrooms.sounds.ModSounds;
 import name.blockrooms.world.generator.ModGenerators;
@@ -59,6 +60,7 @@ public class Blockrooms {
         ModDataComponents.register(modEventBus);
         ModEntities.register(modEventBus);
         ModStructures.register(modEventBus);
+        ModLootConditions.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         
         NeoForge.EVENT_BUS.register(this);
@@ -82,6 +84,9 @@ public class Blockrooms {
         event.put(ModEntities.BLOOD_ZOMBIE.get(), BloodZombie.createAttributes().build());
         event.put(ModEntities.SKELETON.get(), EnhancedSkeleton.createAttributes().build());
         event.put(ModEntities.BLACKSTONE_SHULKER.get(), Shulker.createAttributes().build());
+        event.put(ModEntities.SECRET_ENTITY_ONE.get(), net.minecraft.world.entity.monster.Vex.createAttributes().build());
+        event.put(ModEntities.BLAST_ZOMBIE.get(), net.minecraft.world.entity.monster.zombie.Zombie.createAttributes().build());
+        event.put(ModEntities.SCULK_CREEPER.get(), net.minecraft.world.entity.monster.Creeper.createAttributes().build());
     }
 
     @SubscribeEvent

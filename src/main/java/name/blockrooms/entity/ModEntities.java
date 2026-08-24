@@ -3,8 +3,8 @@ package name.blockrooms.entity;
 import name.blockrooms.Blockrooms;
 import name.blockrooms.entity.projectiles.BlockProjectile;
 import name.blockrooms.entity.projectiles.ItemProjectile;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
+import name.blockrooms.entity.secret.SecretEntityOne;
+import net.minecraft.core.registries.Registries;import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -38,6 +38,30 @@ public class ModEntities {
             ENTITY_TYPES.register("blackstone_shulker", id ->
                     EntityType.Builder.of(BlackstoneShulker::new, MobCategory.MONSTER)
                             .sized(1.0F, 1.0F)
+                            .clientTrackingRange(10)
+                            .build(entityId(id)));
+
+    /** 秘密实体一号（块室意志的投影，占位）：恼鬼模型巨大化 + 锁链装饰 */
+    public static final DeferredHolder<EntityType<?>, EntityType<SecretEntityOne>> SECRET_ENTITY_ONE =
+            ENTITY_TYPES.register("secret_entity_one", id ->
+                    EntityType.Builder.of(SecretEntityOne::new, MobCategory.MISC)
+                            .sized(0.4F, 0.8F)
+                            .clientTrackingRange(16)
+                            .build(entityId(id)));
+
+    /** 爆破僵尸（BL13.8）：会飞的 TNT 僵尸 */
+    public static final DeferredHolder<EntityType<?>, EntityType<BlastZombie>> BLAST_ZOMBIE =
+            ENTITY_TYPES.register("blast_zombie", id ->
+                    EntityType.Builder.of(BlastZombie::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.95F)
+                            .clientTrackingRange(10)
+                            .build(entityId(id)));
+
+    /** 幽匿苦力怕（BL13.8）：4 倍血量 + 隔墙爆炸 */
+    public static final DeferredHolder<EntityType<?>, EntityType<SculkCreeper>> SCULK_CREEPER =
+            ENTITY_TYPES.register("sculk_creeper", id ->
+                    EntityType.Builder.of(SculkCreeper::new, MobCategory.MONSTER)
+                            .sized(0.6F, 1.7F)
                             .clientTrackingRange(10)
                             .build(entityId(id)));
 

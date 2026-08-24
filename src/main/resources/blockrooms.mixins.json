@@ -4,6 +4,8 @@
     "compatibilityLevel": "JAVA_21",
     "mixins": [
         "ChunkGeneratorMixin",
+        "DimensionArgumentMixin",
+        "MinecraftServerMixin",
         "RecipeCraftingHolderMixin",
         "ResultSlotInvoker",
         "ResultSlotMixin",
@@ -18,6 +20,7 @@
     },
     "client": [
         "EntityRendererMixin",
-        "LevelRendererMixin"
+        "LevelRendererMixin",
+        "ScreenshotMixin"
     ]
 }

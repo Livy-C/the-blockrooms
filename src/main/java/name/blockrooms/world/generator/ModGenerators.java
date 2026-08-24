@@ -9,7 +9,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 @SuppressWarnings("unused")
-public class ModGenerators {
+public class
+ModGenerators {
     private static final DeferredRegister<MapCodec<? extends ChunkGenerator>> CHUNK_GENERATORS = DeferredRegister.create(Registries.CHUNK_GENERATOR, Blockrooms.MODID);
     private static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> BL0_GENERATOR =
             CHUNK_GENERATORS.register("blocklevel0_generator", () -> BlockLevel0Generator.CODEC);
@@ -27,5 +28,9 @@ public class ModGenerators {
             CHUNK_GENERATORS.register("blocklevel_null_generator", () -> BlockLevelNullGenerator.CODEC);
     private static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> BL15_GENERATOR =
             CHUNK_GENERATORS.register("blocklevel15_generator", () -> BlockLevel15Generator.CODEC);
+    private static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> BL303_GENERATOR =
+            CHUNK_GENERATORS.register("blocklevel303_generator", () -> BlockLevel303Generator.CODEC);
+    private static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> SECRET_PLACE_GENERATOR =
+            CHUNK_GENERATORS.register("secret_place_generator", () -> SecretPlaceGenerator.CODEC);
     public static void register(IEventBus eventBus) { CHUNK_GENERATORS.register(eventBus); }
 }

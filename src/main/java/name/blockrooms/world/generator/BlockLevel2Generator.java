@@ -55,14 +55,13 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
 
 
     public static final Identifier TPL_HEAT_MACHINE = Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_heating_iron_block_machine");
+    /** 机器房密度：约每 1024 个区块一个（≈32×32 区块、512 格间隔），保证温度系统有缓冲区 */
+    public static final int HEAT_MACHINE_DENOM = 1024;
+    /** 特殊房间模板（16×16 满区块；机器房独立判定，不在此列）：棺材房 / 惊喜房 */
     private static final Identifier[] SPECIAL_TEMPLATES = {
-            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_treasure_rooms"),
-            TPL_HEAT_MACHINE,
-            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_skeleton"),
-            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_blocked_exit"),
-            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_model_rooms")
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_coffin_room"),
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_supplise_room")
     };
-    private static final int SPECIAL_OFFSET = 2;
 
     public static final MapCodec<BlockLevel2Generator> CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
@@ -246,8 +245,12 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
 
         Identifier tpl;
         Rotation rotation = Rotation.NONE;
-        boolean special = hashChunk(seed, cp.x, cp.z) % 12 == 0;
-        if (special) {
+        // 机器房：独立低概率判定（约 1/1024 区块），优先于普通特殊房间
+        boolean heatMachine = isHeatMachineChunk(seed, cp.x, cp.z);
+        boolean special = !heatMachine && hashChunk(seed, cp.x, cp.z) % 12 == 0;
+        if (heatMachine) {
+            tpl = TPL_HEAT_MACHINE;
+        } else if (special) {
             tpl = SPECIAL_TEMPLATES[(int) ((hashChunk(seed, cp.x, cp.z) >>> 8) % SPECIAL_TEMPLATES.length)];
         } else {
             switch (count) {
@@ -288,9 +291,7 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
             Blockrooms.LOGGER.error("BL2-TPL: chunk {} failed to load template {}: {}", cp, tpl, e.toString());            template = null;
         }
         BlockPos origin = new BlockPos(cp.getMinBlockX(), 0, cp.getMinBlockZ());
-        if (special) {
-            origin = origin.offset(SPECIAL_OFFSET, 0, SPECIAL_OFFSET);
-        }
+        // 新版特殊房间均为 16×16 满区块尺寸，与普通模板同原点放置（旧 12×12 居中偏移已移除）
         if (template == null) {
             // 模板缺失（尚未搭建/文件名不符）：实心石砖保底，避免玩家掉进虚空
             Blockrooms.LOGGER.warn("BL2-TPL: chunk {} template {} not found -> solid fallback", cp, tpl);
@@ -355,13 +356,14 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
         return h ^ (h >>> 29);
     }
 
+    /**
+     * 该区块是否为红热铁块机器房（独立判定，与 {@link #placeWorldTemplate} 同一哈希）：
+     * 约每 {@link #HEAT_MACHINE_DENOM} 个区块一个（≈32×32 区块间隔），
+     * 保证机器热场之间有足够的缓冲区。
+     */
     public static boolean isHeatMachineChunk(long seed, int chunkX, int chunkZ) {
         long h = hashChunk(seed, chunkX, chunkZ);
-        if (h % 12 != 0) {
-            return false;
-        }
-        Identifier tpl = SPECIAL_TEMPLATES[(int) ((h >>> 8) % SPECIAL_TEMPLATES.length)];
-        return tpl.equals(TPL_HEAT_MACHINE);
+        return (h & Long.MAX_VALUE) % HEAT_MACHINE_DENOM == 0;
     }
 
     public static BlockPos heatMachineCenter(int chunkX, int chunkZ) {

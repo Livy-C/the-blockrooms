@@ -126,6 +126,27 @@
       "entity_color": "#999999"
     }
   },
+  "blocklevel303": {
+    "title": "BlockLevel 303 - 浮云一梦之城",
+    "title_color": "#e8e8e8",
+    "lines": [
+      { "text": "一座无尽的混凝土城市，昼夜交替，安宁祥和。", "color": "#b8b8b8" },
+      { "text": "别向西北走得太远——那里的虚空没有尽头。", "color": "#a8a8a8" }
+    ],
+    "type_speed": 2,
+    "line_delay": 12,
+    "hold_ticks": 80,
+    "difficulty": {
+      "title": "Class Habitable",
+      "title_color": "#4CAF50",
+      "safe": "》本体安全但存在危险出口",
+      "security": "》友好社区",
+      "entity": "》敌对生物绝迹",
+      "safe_color": "#4CAF50",
+      "security_color": "#4CAF50",
+      "entity_color": "#4CAF50"
+    }
+  },
   "blocklevel_null": {
     "title": "BlockLevel Null - 空值之室",
     "title_color": "#e8e8e8",

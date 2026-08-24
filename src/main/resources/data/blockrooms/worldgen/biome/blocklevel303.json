@@ -1,0 +1,43 @@
+{
+    "attributes": {
+        "minecraft:visual/sky_color": "#7fb4d9"
+    },
+    "carvers": [],
+    "downfall": 0.4,
+    "effects": {
+        "water_color": "#3f76e4"
+    },
+    "features": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+    ],
+    "has_precipitation": false,
+    "spawn_costs": {},
+    "spawners": {
+        "ambient": [],
+        "axolotls": [],
+        "creature": [
+            {
+                "type": "minecraft:villager",
+                "maxCount": 4,
+                "minCount": 1,
+                "weight": 100
+            }
+        ],
+        "misc": [],
+        "monster": [],
+        "underground_water_creature": [],
+        "water_ambient": [],
+        "water_creature": []
+    },
+    "temperature": 0.7
+}

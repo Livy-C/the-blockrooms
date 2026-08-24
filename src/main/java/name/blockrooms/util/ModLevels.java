@@ -22,6 +22,12 @@ public class ModLevels {
     public static final ResourceKey<Level> BLOCKLEVEL_NULL = level("blocklevel_null");
     /** BlockLevel 15：凝灰岩平原 + 拱门 */
     public static final ResourceKey<Level> BLOCKLEVEL_15 = level("blocklevel15");
+    /** BlockLevel 303：浮云一梦之城（无尽混凝土城市 + 郊区） */
+    public static final ResourceKey<Level> BLOCKLEVEL_303 = level("blocklevel303");
+    /** BlockLevel 13.8：往迹浸复湮，来径遂芜废（海洋 + 暴雨 + 危险水域） */
+    public static final ResourceKey<Level> BLOCKLEVEL_13_8 = level("blocklevel13_8");
+    /** Site 404：ERROR! 404 Not Found（纯黑虚空 + 故障） */
+    public static final ResourceKey<Level> SITE_404 = level("site_404");
     public static final ResourceKey<Level> GALLERY = level("the_gallery");
 
     public static boolean isInBlockrooms(ResourceKey<Level> key){
