@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -55,12 +56,11 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
 
 
     public static final Identifier TPL_HEAT_MACHINE = Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_heating_iron_block_machine");
-    /** 机器房密度：约每 1024 个区块一个（≈32×32 区块、512 格间隔），保证温度系统有缓冲区 */
     public static final int HEAT_MACHINE_DENOM = 1024;
-    /** 特殊房间模板（16×16 满区块；机器房独立判定，不在此列）：棺材房 / 惊喜房 */
     private static final Identifier[] SPECIAL_TEMPLATES = {
             Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_coffin_room"),
-            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_supplise_room")
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_supplise_room"),
+            Identifier.fromNamespaceAndPath(Blockrooms.MODID, "bl2_sensing_room")
     };
 
     public static final MapCodec<BlockLevel2Generator> CODEC = RecordCodecBuilder.mapCodec(instance ->
@@ -96,24 +96,13 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
     private static final int CHEST_DENOM = 25;
     private static final int IRON_DENOM = 40;
     private static final int TERRACOTTA_DENOM = 15;
+    private static final int TORCH_DENOM = 8;
     private static final int SHULKER_ON_IRON_DENOM = 3;
     private static final int SPECIAL_ROOM_CHEST_DENOM = 24;
 
-    /**
-     * 隧道装饰还原（确定性哈希，仅普通隧道区块；特殊房间区块由房间规则负责）：
-     * <ul>
-     *   <li>只在<b>隧道内部靠原始结构墙</b>的地面格（y=1）生成：装饰方块不会被当作"墙"
-     *       （杜绝连锁蔓延挤占通道），并要求隧道方向至少 2 格连续空气（宽 2 通道不生成）；</li>
-     *   <li><b>箱子</b>：靠墙单格，约 1/25；</li>
-     *   <li><b>铁块</b> / <b>红色陶瓦</b>：靠墙<b>沿隧道走向延伸 3~4 格</b>的一排
-     *       （约 1/40 / 1/15），排的末端约一半概率叠到 y=2；</li>
-     *   <li><b>潜影盒</b>只生成在铁块排起点上方（约 1/3）。</li>
-     * </ul>
-     */
     private static void placeDecorations(WorldGenLevel level, ChunkAccess chunk) {
         long seed = level.getSeed();
         ChunkPos cp = chunk.getPos();
-        // 特殊房间区块：装饰与随机容器由房间规则负责（见 fillSpecialRoomLoot），这里跳过
         if (isSpecialChunk(seed, cp.x, cp.z)) {
             return;
         }
@@ -125,7 +114,6 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
                 if (!level.getBlockState(p).isAir() || !level.getBlockState(p.below()).is(Blocks.SMOOTH_STONE)) {
                     continue;
                 }
-                // 靠原始结构墙 + 隧道方向至少 2 格连续空气（宽 2 通道、隧道中间格不满足 → 不生成）
                 if (!wallAdjacent(level, p) || tunnelDir(level, p) == null) {
                     continue;
                 }
@@ -136,25 +124,27 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
                     placeDecoRun(level, seed, p, Blocks.IRON_BLOCK);
                 } else if (h % TERRACOTTA_DENOM == 10) {
                     placeDecoRun(level, seed, p, Blocks.RED_TERRACOTTA);
+                } else if (h % TORCH_DENOM == 3) {
+                    Direction wallDir = wallDirection(level, p);
+                    if (wallDir != null && level.getBlockState(p.above()).isAir()) {
+                        level.setBlock(p.above(),
+                                Blocks.REDSTONE_WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, wallDir),
+                                Block.UPDATE_NONE);
+                    }
                 }
             }
         }
     }
 
-    /**
-     * 生成一排装饰（铁块/陶瓦）：沿隧道走向延伸 3~4 格（向前后随机分配），
-     * 末端约一半概率在 y=2 再叠一格；铁块排起点上方按概率生成潜影盒。
-     * 路径上任一格不合法（非空气/无地板/不靠墙/通道过窄）则放弃整排。
-     */
     private static void placeDecoRun(WorldGenLevel level, long seed, BlockPos start, Block block) {
         Direction dir = tunnelDir(level, start);
         if (dir == null) {
             return;
         }
         long h = hash3(seed, start.getX(), start.getY(), start.getZ());
-        int total = 3 + (int) (h % 2);                     // 排总长 3~4 格
-        int forward = 1 + (int) ((h >>> 8) % (total - 1)); // 向前 1..total-1
-        int backward = total - 1 - forward;                // 向后补足
+        int total = 3 + (int) (h % 2);
+        int forward = 1 + (int) ((h >>> 8) % (total - 1));
+        int backward = total - 1 - forward;
         BlockPos tip = null;
         for (int i = -backward; i <= forward; i++) {
             BlockPos q = start.relative(dir, i);
@@ -162,18 +152,16 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
                     || !level.getBlockState(q.below()).is(Blocks.SMOOTH_STONE)
                     || !wallAdjacent(level, q)
                     || tunnelDir(level, q) == null) {
-                return; // 路径上有非法格 → 放弃整排，保持简单
+                return;
             }
             tip = q;
         }
         for (int i = -backward; i <= forward; i++) {
             level.setBlock(start.relative(dir, i), block.defaultBlockState(), Block.UPDATE_NONE);
         }
-        // 末端约一半概率叠到 y=2（铁块/陶瓦通用）
         if ((h & 1) == 0 && tip != null && level.getBlockState(tip.above()).isAir()) {
             level.setBlock(tip.above(), block.defaultBlockState(), Block.UPDATE_NONE);
         }
-        // 潜影盒：只生成在铁块上方
         if (block == Blocks.IRON_BLOCK
                 && hash2(seed, start.getX(), start.getZ()) % SHULKER_ON_IRON_DENOM == 0
                 && level.getBlockState(start.above()).isAir()) {
@@ -181,10 +169,6 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
         }
     }
 
-    /**
-     * 隧道走向：水平 4 方向中"前方 2 格都是空气"的方向（即隧道内部方向）。
-     * 多个方向（十字口）时按位置哈希固定选一个；无方向（宽 2 通道/死路尽端）返回 null。
-     */
     private static Direction tunnelDir(WorldGenLevel level, BlockPos p) {
         List<Direction> dirs = new ArrayList<>(4);
         for (Direction d : Direction.Plane.HORIZONTAL) {
@@ -199,12 +183,10 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
         return dirs.get((int) Math.floorMod(p.asLong(), dirs.size()));
     }
 
-    /** 该区块是否为特殊房间区块（与生成逻辑同一哈希判定） */
     private static boolean isSpecialChunk(long seed, int chunkX, int chunkZ) {
         return hashChunk(seed, chunkX, chunkZ) % 12 == 0;
     }
 
-    /** 靠墙：水平 4 方向至少一侧是<b>原始结构方块</b>（装饰方块不算墙，杜绝连锁蔓延） */
     private static boolean wallAdjacent(WorldGenLevel level, BlockPos p) {
         return isStructureWall(level.getBlockState(p.north()))
                 || isStructureWall(level.getBlockState(p.south()))
@@ -218,6 +200,14 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
                 && !state.is(Blocks.RED_TERRACOTTA)
                 && !state.is(Blocks.CHEST)
                 && !state.is(Blocks.SHULKER_BOX);
+    }
+
+    private static Direction wallDirection(WorldGenLevel level, BlockPos p) {
+        if (isStructureWall(level.getBlockState(p.north()))) return Direction.NORTH;
+        if (isStructureWall(level.getBlockState(p.south()))) return Direction.SOUTH;
+        if (isStructureWall(level.getBlockState(p.east()))) return Direction.EAST;
+        if (isStructureWall(level.getBlockState(p.west()))) return Direction.WEST;
+        return null;
     }
 
     private static long hash2(long seed, int x, int z) {
@@ -245,7 +235,6 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
 
         Identifier tpl;
         Rotation rotation = Rotation.NONE;
-        // 机器房：独立低概率判定（约 1/1024 区块），优先于普通特殊房间
         boolean heatMachine = isHeatMachineChunk(seed, cp.x, cp.z);
         boolean special = !heatMachine && hashChunk(seed, cp.x, cp.z) % 12 == 0;
         if (heatMachine) {
@@ -266,7 +255,6 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
                 } else if (east && west) {
                     tpl = TPL_CORRIDOR_X;
                 } else {
-                    // 拐角：模板基准为东南口（东=1、南=2），a 为两口中顺时针序靠前的一个
                     tpl = TPL_CORNER;
                     int a = north ? (east ? 0 : 3) : (east ? 1 : 2);
                     rotation = Rotation.values()[Math.floorMod(a - 1, 4)];
@@ -291,9 +279,7 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
             Blockrooms.LOGGER.error("BL2-TPL: chunk {} failed to load template {}: {}", cp, tpl, e.toString());            template = null;
         }
         BlockPos origin = new BlockPos(cp.getMinBlockX(), 0, cp.getMinBlockZ());
-        // 新版特殊房间均为 16×16 满区块尺寸，与普通模板同原点放置（旧 12×12 居中偏移已移除）
         if (template == null) {
-            // 模板缺失（尚未搭建/文件名不符）：实心石砖保底，避免玩家掉进虚空
             Blockrooms.LOGGER.warn("BL2-TPL: chunk {} template {} not found -> solid fallback", cp, tpl);
             fillFallback(chunk);
             return;
@@ -356,11 +342,6 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
         return h ^ (h >>> 29);
     }
 
-    /**
-     * 该区块是否为红热铁块机器房（独立判定，与 {@link #placeWorldTemplate} 同一哈希）：
-     * 约每 {@link #HEAT_MACHINE_DENOM} 个区块一个（≈32×32 区块间隔），
-     * 保证机器热场之间有足够的缓冲区。
-     */
     public static boolean isHeatMachineChunk(long seed, int chunkX, int chunkZ) {
         long h = hashChunk(seed, chunkX, chunkZ);
         return (h & Long.MAX_VALUE) % HEAT_MACHINE_DENOM == 0;
@@ -439,7 +420,6 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
 
     @Override
     public void spawnOriginalMobs(WorldGenRegion level) {
-        // 结构模板自包含（含箱子/装饰）；此阶段无需额外生成
     }
 
     @Override

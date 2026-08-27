@@ -5,12 +5,6 @@ import name.blockrooms.Blockrooms;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 
-/**
- * 虚空之船（黑石大船，含梯子、末地烛与酿造台，跨区块 13×23×28）。
- * 模板：{@code data/blockrooms/structure/void_boat.nbt}。
- * 只注册、暂不自然生成——预留给 The Void 维度；维度实装后为它添加
- * structure_set 并改为间距门控即可自然生成。
- */
 public class VoidBoatStructure extends TemplateScatterStructure {
     public static final MapCodec<VoidBoatStructure> CODEC = simpleCodec(VoidBoatStructure::new);
     private static final long SALT = 0x1BADC0DE00000005L;

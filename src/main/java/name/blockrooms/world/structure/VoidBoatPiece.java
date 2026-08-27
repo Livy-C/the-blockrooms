@@ -11,7 +11,6 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 
-/** 虚空之船的部件骨架（当前未使用：VoidBoatStructure 走 NbtTemplatePiece 放置模板）。 */
 public class VoidBoatPiece extends StructurePiece {
 
     public VoidBoatPiece(BlockPos anchor, int sizeX, int sizeY, int sizeZ) {

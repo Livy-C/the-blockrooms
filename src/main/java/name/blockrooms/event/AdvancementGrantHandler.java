@@ -17,14 +17,6 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.Optional;
 
-/**
- * 代码发放的进度（原版触发器无法表达的条件）：
- * <ul>
- *   <li>「不太正常的工作台」：打开错误合成台界面（{@link PlayerContainerEvent.Open}）；</li>
- *   <li>「熄灯时间到」：位于 BlockLevel 1 且处于夜晚（白天时间 13000~24000 刻）。</li>
- * </ul>
- * 对应进度的判据均为 {@code minecraft:impossible}，由本类在条件满足时按判据名发放。
- */
 @EventBusSubscriber
 public class AdvancementGrantHandler {
 
@@ -55,7 +47,7 @@ public class AdvancementGrantHandler {
             return;
         }
         if (level.getDayTime() % 24000 < 13000) {
-            return; // 白天
+            return;
         }
         grant(player, LIGHTS_OUT, "night");
     }

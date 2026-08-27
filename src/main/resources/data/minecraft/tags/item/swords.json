@@ -1,6 +1,7 @@
 {
     "replace": false,
     "values": [
-        "blockrooms:ruby_sword"
+        "blockrooms:ruby_sword",
+        "blockrooms:soul_alloy_sword"
     ]
 }

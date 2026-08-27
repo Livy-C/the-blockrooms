@@ -15,17 +15,6 @@ import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-/**
- * 空值之室（Level Null）规则：
- * <ul>
- *   <li>进入即切换为<b>极限冒险模式</b>（冒险模式，难度由世界决定）；</li>
- *   <li>平台中心上空灰色粒子柱（信标式），接触获得 5 秒急迫+速度；</li>
- *   <li>停留约 10 分钟（RT）后触发<b>精神危害</b>：周期性施加挖掘疲劳/缓慢/虚弱
- *       （空虚/无助/疲劳），饮用杏仁奶桶可暂时摆脱；</li>
- *   <li>中心木桶不断刷新杏仁奶桶（永不耗尽）；</li>
- *   <li>掉出虚空 → 传送回平台中心。</li>
- * </ul>
- */
 @EventBusSubscriber
 public class NullLevelHandler {
     private static final String ENTER_TAG = "blockrooms.null.enter_time";
@@ -97,7 +86,7 @@ public class NullLevelHandler {
         }
         if (time - entered >= HAZARD_AFTER_TICKS) {
             if ((time - entered) % HAZARD_INTERVAL < 20) {
-                int duration = 30 * 20; // 30 秒
+                int duration = 30 * 20;
                 player.addEffect(new MobEffectInstance(MobEffects.MINING_FATIGUE, duration, 1, false, true));
                 player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, duration, 0, false, true));
                 player.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, duration, 0, false, true));

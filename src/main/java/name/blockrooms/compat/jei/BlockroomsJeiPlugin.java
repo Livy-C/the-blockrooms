@@ -22,7 +22,7 @@ import java.util.List;
 public class BlockroomsJeiPlugin implements IModPlugin {
     protected static RecipeMap recipes;
     public static final IRecipeType<ErrorCraftingRecipe> ERROR_CRAFTING =
-            IRecipeType.create(Blockrooms.MODID, "crafting_error", ErrorCraftingRecipe.class);
+            IRecipeType.create("minecraft", "crafting_error", ErrorCraftingRecipe.class);
 
     public static boolean isJEIAvailable() {
         try {

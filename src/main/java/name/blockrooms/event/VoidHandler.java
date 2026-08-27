@@ -18,7 +18,6 @@ public class VoidHandler {
         if(event.getEntity() instanceof ServerPlayer sp){
             if(ModLevels.isInBlockrooms(sp.level().dimension())){
                 if(sp.getY() < sp.level().getMinY() - 32){
-                    // BlockLevel 303 的虚空由 303 自己的规则处理（跳入 → BlockLevel N，见 BlockLevel303Handler）
                     if(sp.level().dimension().equals(ModLevels.BLOCKLEVEL_303)) return;
                     if(!sp.level().dimension().equals(ModLevels.BLOCKLEVEL_NULL)) TeleportUtils.teleportPlayer(sp, ModLevels.BLOCKLEVEL_NULL);
                     else{

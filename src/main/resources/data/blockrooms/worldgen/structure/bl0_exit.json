@@ -1,0 +1,9 @@
+﻿{
+    "type": "blockrooms:bl0_exit",
+    "biomes": [
+        "blockrooms:blocklevel0"
+    ],
+    "spawn_overrides": {},
+    "step": "surface_structures",
+    "terrain_adaptation": "none"
+}

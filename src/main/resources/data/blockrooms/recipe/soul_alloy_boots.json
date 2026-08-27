@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "blockrooms:soul_alloy_ingot",
+  "base": "minecraft:iron_boots",
+  "result": { "id": "blockrooms:soul_alloy_boots" },
+  "template": "blockrooms:soul_alloy_smithing_template"
+}

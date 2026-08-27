@@ -38,8 +38,6 @@ public class GalleryPassageHandler {
         if (now - player.getPersistentData().getLongOr(LAST_PASSAGE_TAG, 0L) < COOLDOWN_TICKS) return;
         player.getPersistentData().putLong(LAST_PASSAGE_TAG, now);
 
-        // 传送画挂在廊道侧墙内侧：西墙画 facing=SOUTH、东墙画 facing=NORTH
-        // 传送到相邻廊道（保持 x/y，z ± CORRIDOR_SPACING，落在相邻廊道内部中线）
         boolean westWall = painting.getDirection() == Direction.SOUTH;
         int k = Math.floorDiv(painting.getBlockZ(), TheGalleryGenerator.CORRIDOR_SPACING);
         int targetK = k + (westWall ? -1 : 1);

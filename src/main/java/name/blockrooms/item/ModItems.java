@@ -43,6 +43,40 @@ public class ModItems {
                                             )
                                     ))
                                     .build()));
+
+    public static final DeferredItem<Item> ENCHANTED_ALMOND_MILK_BUCKET =
+            ITEMS.registerItem("enchanted_almond_milk_bucket", Item::new,
+                    properties -> properties.craftRemainder(Items.BUCKET)
+                            .usingConvertsTo(Items.BUCKET).stacksTo(1)
+                            .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+                            .component(DataComponents.CONSUMABLE,
+                            Consumables.defaultDrink()
+                                    .onConsume(ClearAllStatusEffectsConsumeEffect.INSTANCE)
+                                    .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                            List.of(
+                                                    new MobEffectInstance(MobEffects.REGENERATION, 600, 2),
+                                                    new MobEffectInstance(MobEffects.ABSORPTION, 1200, 2),
+                                                    new MobEffectInstance(MobEffects.RESISTANCE, 1200, 0),
+                                                    new MobEffectInstance(MobEffects.HEALTH_BOOST, 1200, 1)
+                                            )
+                                    ))
+                                    .build()));
+
+    public static final DeferredItem<Item> SUPER_ENCHANTMENT_GOLDEN_APPLE =
+            ITEMS.registerItem("super_enchantment_golden_apple", Item::new,
+                    properties -> properties.stacksTo(1)
+                            .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+                            .food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2f).alwaysEdible().build(),
+                                    Consumables.defaultFood()
+                                            .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                                    List.of(
+                                                            new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3),
+                                                            new MobEffectInstance(MobEffects.REGENERATION, 1200, 4),
+                                                            new MobEffectInstance(MobEffects.RESISTANCE, 3000, 1),
+                                                            new MobEffectInstance(MobEffects.HEALTH_BOOST, 2400, 3)
+                                                    )
+                                            ))
+                                            .build()));
     public static final DeferredItem<Item> RUBY =
             ITEMS.registerSimpleItem("ruby");
     public static final DeferredItem<Item> RUBY_SWORD =
@@ -121,7 +155,25 @@ public class ModItems {
     public static final DeferredItem<Item> SOUL_ALLOY_INGOT = ITEMS.registerSimpleItem("soul_alloy_ingot");
     public static final DeferredItem<Item> SOUL_ALLOY_STICK = ITEMS.registerSimpleItem("soul_alloy_stick");
     public static final DeferredItem<Item> SOUL_ALLOY_PICKAXE =
-            ITEMS.registerSimpleItem("soul_alloy_pickaxe", properties -> properties.pickaxe(ModToolMaterials.SOUL, 1.0F, -2.8F));
+            ITEMS.registerSimpleItem("soul_alloy_pickaxe", properties -> properties.pickaxe(ModToolMaterials.SOUL, 0.5F, -2.8F));
+    public static final DeferredItem<Item> SOUL_ALLOY_SWORD =
+            ITEMS.registerSimpleItem("soul_alloy_sword", properties -> properties.sword(ModToolMaterials.SOUL, 2.5F, -2.4F));
+    public static final DeferredItem<Item> SOUL_ALLOY_AXE =
+            ITEMS.registerSimpleItem("soul_alloy_axe", properties -> properties.axe(ModToolMaterials.SOUL, 4.5F, -3.0F));
+    public static final DeferredItem<Item> SOUL_ALLOY_SHOVEL =
+            ITEMS.registerSimpleItem("soul_alloy_shovel", properties -> properties.shovel(ModToolMaterials.SOUL, 1.0F, -3.0F));
+
+    public static final DeferredItem<Item> SOUL_ALLOY_SMITHING_TEMPLATE =
+            ITEMS.registerSimpleItem("soul_alloy_smithing_template");
+
+    public static final DeferredItem<Item> SOUL_ALLOY_HELMET =
+            ITEMS.registerSimpleItem("soul_alloy_helmet", properties -> properties.humanoidArmor(ModArmorMaterials.SOUL_ALLOY, ArmorType.HELMET));
+    public static final DeferredItem<Item> SOUL_ALLOY_CHESTPLATE =
+            ITEMS.registerSimpleItem("soul_alloy_chestplate", properties -> properties.humanoidArmor(ModArmorMaterials.SOUL_ALLOY, ArmorType.CHESTPLATE));
+    public static final DeferredItem<Item> SOUL_ALLOY_LEGGINGS =
+            ITEMS.registerSimpleItem("soul_alloy_leggings", properties -> properties.humanoidArmor(ModArmorMaterials.SOUL_ALLOY, ArmorType.LEGGINGS));
+    public static final DeferredItem<Item> SOUL_ALLOY_BOOTS =
+            ITEMS.registerSimpleItem("soul_alloy_boots", properties -> properties.humanoidArmor(ModArmorMaterials.SOUL_ALLOY, ArmorType.BOOTS));
 
     public static final DeferredItem<Item> HEAT_INSULATION_HELMET =
             ITEMS.registerSimpleItem("heat_insulation_helmet", properties -> properties.humanoidArmor(ModArmorMaterials.HEAT_INSULATION, ArmorType.HELMET));

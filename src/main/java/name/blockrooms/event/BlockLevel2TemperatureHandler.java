@@ -7,9 +7,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
-/**
- * BlockLevel 2 温度系统的挂载点：把 {@link BlockLevel2Temperature} 接入玩家 tick。
- */
 @EventBusSubscriber
 public class BlockLevel2TemperatureHandler {
     @SubscribeEvent

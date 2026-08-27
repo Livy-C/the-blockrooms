@@ -10,13 +10,9 @@ import net.minecraft.world.level.levelgen.structure.StructureType;
 
 import java.util.Optional;
 
-/**
- * BlockLevel 2 的石英门：随机散落在隧道中，门后传送方块指向 BlockLevel 1。
- */
 public class QuartzDoorStructure extends Structure {
     public static final MapCodec<QuartzDoorStructure> CODEC = simpleCodec(QuartzDoorStructure::new);
 
-    /** 每个区块生成一扇门的概率为 1 / DOOR_SPACING。 */
     private static final long DOOR_SPACING = 8;
 
     public QuartzDoorStructure(StructureSettings settings) {
@@ -33,8 +29,6 @@ public class QuartzDoorStructure extends Structure {
         int dx = 2 + (int) Math.floorMod(hash >>> 8, 12);
         int dz = 2 + (int) Math.floorMod(hash >>> 16, 12);
         Direction facing = Direction.from2DDataValue((int) Math.floorMod(hash >>> 24, 4));
-        // y=1：结构写在 y=1..3（3 格高）。不能从 y=0 开始——postProcess 的 writable area
-        // 是 minY+1..maxY（最底层留给基岩），y=0 的方块会被 box.isInside 静默丢弃。
         BlockPos anchor = new BlockPos(chunkPos.getMinBlockX() + dx, 1, chunkPos.getMinBlockZ() + dz);
         return Optional.of(new GenerationStub(anchor,
                 builder -> builder.addPiece(new BlockLevel2DoorPiece(anchor, facing, true, ModLevels.BLOCKLEVEL_1))));

@@ -4,13 +4,14 @@
     "compatibilityLevel": "JAVA_21",
     "mixins": [
         "ChunkGeneratorMixin",
+        "DebugScreenOverlayMixin",
         "DimensionArgumentMixin",
         "MinecraftServerMixin",
         "RecipeCraftingHolderMixin",
         "ResultSlotInvoker",
         "ResultSlotMixin",
         "StructureManagerMixin",
-        "DebugScreenOverlayMixin"
+        "StructureTemplateMixin"
     ],
     "injectors": {
         "defaultRequire": 1

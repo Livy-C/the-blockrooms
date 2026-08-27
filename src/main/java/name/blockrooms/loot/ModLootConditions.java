@@ -11,7 +11,6 @@ public class ModLootConditions {
     private static final DeferredRegister<LootItemConditionType> CONDITIONS =
             DeferredRegister.create(Registries.LOOT_CONDITION_TYPE, Blockrooms.MODID);
 
-    /** 维度 = BlockLevel 13.8（用于 13.8 的战利品替换） */
     public static final DeferredHolder<LootItemConditionType, LootItemConditionType> IN_BLOCKLEVEL_13_8 =
             CONDITIONS.register("in_blocklevel_13_8", () -> new LootItemConditionType(InBlockLevel13_8Condition.CODEC));
 

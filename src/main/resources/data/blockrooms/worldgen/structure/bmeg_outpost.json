@@ -1,9 +1,0 @@
-{
-    "type": "blockrooms:bmeg_outpost",
-    "biomes": [
-        "blockrooms:blocklevel0"
-    ],
-    "spawn_overrides": {},
-    "step": "surface_structures",
-    "terrain_adaptation": "none"
-}

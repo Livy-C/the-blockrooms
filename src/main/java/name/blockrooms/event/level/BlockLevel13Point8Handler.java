@@ -33,25 +33,12 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * BlockLevel 13.8「往迹浸复湮，来径遂芜废」规则：
- * <ul>
- *   <li>永久雨天；</li>
- *   <li><b>背包替换</b>：进入时保存原背包并换成固定装备（石镐/石剑/铁斧/两弓/两组箭），
- *       离开时以进入前的物品栏替换当前背包；</li>
- *   <li><b>危险水域</b>：接触水 → 氧气快速减少、耗尽后快速扣血；淋雨 → 中毒 I；
- *       携带水桶 → 缓慢 III；船在水中约 1 分钟后沉没；</li>
- *   <li>错误工作台无法放置。</li>
- * </ul>
- * 遗迹奖励箱战利品由数据包覆盖（见 data/minecraft/loot_table/chests/，按维度条件区分）。
- */
 @EventBusSubscriber
 public class BlockLevel13Point8Handler {
     private static final String SAVED_INVENTORY_TAG = "blockrooms.13_8.saved_inventory";
     private static final String BOAT_SINK_TAG = "blockrooms.13_8.boat_sink";
-    private static final int BOAT_SINK_TICKS = 1200; // 现实 1 分钟
+    private static final int BOAT_SINK_TICKS = 1200;
 
-    // ---------- 永久雨天 ----------
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
@@ -65,7 +52,6 @@ public class BlockLevel13Point8Handler {
         }
     }
 
-    // ---------- 背包替换 ----------
 
     @SubscribeEvent
     public static void onTravel(EntityTravelToDimensionEvent event) {
@@ -73,16 +59,13 @@ public class BlockLevel13Point8Handler {
             return;
         }
         if (event.getDimension().equals(ModLevels.BLOCKLEVEL_13_8)) {
-            // 进入：保存原背包 → 换成固定装备
             saveInventory(player);
             giveStarterKit(player);
         } else if (player.level().dimension().equals(ModLevels.BLOCKLEVEL_13_8)) {
-            // 离开：当前（13.8 内获取的）背包被进入前的物品栏替换
             restoreInventory(player);
         }
     }
 
-    /** 用 ItemStack 网络编解码器把整个背包序列化进 NBT（1.21.11 无 ItemStack 直接 NBT 保存 API） */
     private static void saveInventory(ServerPlayer player) {
         Inventory inv = player.getInventory();
         List<ItemStack> stacks = new ArrayList<>();
@@ -123,7 +106,6 @@ public class BlockLevel13Point8Handler {
         player.getPersistentData().remove(SAVED_INVENTORY_TAG);
     }
 
-    /** 固定装备：石镐、石剑、铁斧、两把弓、两组箭矢 */
     private static void giveStarterKit(ServerPlayer player) {
         player.getInventory().clearContent();
         ItemStack[] kit = {
@@ -138,7 +120,6 @@ public class BlockLevel13Point8Handler {
         }
     }
 
-    // ---------- 危险水域 ----------
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
@@ -148,7 +129,6 @@ public class BlockLevel13Point8Handler {
         if (!player.level().dimension().equals(ModLevels.BLOCKLEVEL_13_8)) {
             return;
         }
-        // 接触水：氧气快速减少；耗尽后快速扣血
         if (player.isInWater()) {
             int air = player.getAirSupply();
             player.setAirSupply(Math.max(0, air - 4));
@@ -156,11 +136,9 @@ public class BlockLevel13Point8Handler {
                 player.hurtServer((ServerLevel) player.level(), player.damageSources().drown(), 1.0F);
             }
         }
-        // 直接暴露在雨中：中毒 I
         if (player.level().isRainingAt(player.blockPosition())) {
             player.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 0, false, false));
         }
-        // 携带水桶：缓慢 III
         if (hasWaterBucket(player)) {
             player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 2, false, false));
         }
@@ -175,7 +153,6 @@ public class BlockLevel13Point8Handler {
         return false;
     }
 
-    // ---------- 船沉没 ----------
 
     @SubscribeEvent
     public static void onEntityTick(EntityTickEvent.Post event) {
@@ -190,7 +167,6 @@ public class BlockLevel13Point8Handler {
         }
     }
 
-    // ---------- 错误工作台禁放 ----------
 
     @SubscribeEvent
     public static void onPlace(BlockEvent.EntityPlaceEvent event) {
@@ -202,7 +178,6 @@ public class BlockLevel13Point8Handler {
         }
     }
 
-    // ---------- 实体生成替换（僵尸→爆破僵尸、苦力怕→幽匿苦力怕） ----------
 
     @SubscribeEvent
     public static void onMobSpawn(net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent event) {
@@ -231,7 +206,6 @@ public class BlockLevel13Point8Handler {
         level.addFreshEntity(replacement);
     }
 
-    // ---------- 爆破僵尸聊天监测 ----------
 
     @SubscribeEvent
     public static void onChat(net.neoforged.neoforge.event.ServerChatEvent event) {
@@ -239,7 +213,6 @@ public class BlockLevel13Point8Handler {
         if (!player.level().dimension().equals(ModLevels.BLOCKLEVEL_13_8)) {
             return;
         }
-        // 玩家聊天 → 周围 64 格的爆破僵尸定位并锁定玩家
         for (BlastZombie bz : player.level().getEntitiesOfClass(BlastZombie.class, player.getBoundingBox().inflate(64))) {
             bz.setTarget(player);
         }

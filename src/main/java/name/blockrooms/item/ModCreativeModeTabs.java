@@ -17,6 +17,8 @@ public class ModCreativeModeTabs {
                     .icon(Items.SANDSTONE::getDefaultInstance)
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.ALMOND_MILK_BUCKET);
+                        output.accept(ModItems.ENCHANTED_ALMOND_MILK_BUCKET);
+                        output.accept(ModItems.SUPER_ENCHANTMENT_GOLDEN_APPLE);
                         output.accept(ModItems.RUBY);
                         output.accept(ModItems.RUBY_SWORD);
                         output.accept(ModItems.RUBY_SHOVEL);
@@ -40,7 +42,15 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.TEMPERATURE_SENSOR);
                         output.accept(ModItems.SOUL_ALLOY_INGOT);
                         output.accept(ModItems.SOUL_ALLOY_STICK);
+                        output.accept(ModItems.SOUL_ALLOY_SMITHING_TEMPLATE);
                         output.accept(ModItems.SOUL_ALLOY_PICKAXE);
+                        output.accept(ModItems.SOUL_ALLOY_SWORD);
+                        output.accept(ModItems.SOUL_ALLOY_AXE);
+                        output.accept(ModItems.SOUL_ALLOY_SHOVEL);
+                        output.accept(ModItems.SOUL_ALLOY_HELMET);
+                        output.accept(ModItems.SOUL_ALLOY_CHESTPLATE);
+                        output.accept(ModItems.SOUL_ALLOY_LEGGINGS);
+                        output.accept(ModItems.SOUL_ALLOY_BOOTS);
                         output.accept(ModItems.HEAT_INSULATION_HELMET);
                         output.accept(ModItems.HEAT_INSULATION_CHESTPLATE);
                         output.accept(ModItems.HEAT_INSULATION_LEGGINGS);

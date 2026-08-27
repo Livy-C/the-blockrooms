@@ -8,11 +8,10 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,79 +19,104 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * 爆破僵尸：BlockLevel 13.8 的僵尸变种。
- * <ul>
- *   <li>主手 TNT、副手打火石、身穿鞘翅；</li>
- *   <li><b>可以飞行</b>：无重力 + 飞行寻路 + 飞行移动控制（完整飞行 AI）；</li>
- *   <li>免疫所有爆炸伤害；</li>
- *   <li>追踪玩家并<b>在玩家周围引爆</b>（AoE 爆炸伤害，不破坏地形）；</li>
- *   <li>玩家聊天时定位并锁定玩家（见 BlockLevel13Point8Handler）。</li>
- * </ul>
- */
 public class BlastZombie extends Zombie {
-    private static final double ATTACK_RANGE = 6.0;
-    private static final int ATTACK_COOLDOWN = 80;
+    private static final double EXPLODE_RANGE_SQ = 16.0;
+    private static final double WALK_RANGE_SQ = 100.0;
+    private static final double ATTACK_COOLDOWN = 80;
+    private static final int TAKE_OFF_TICKS = 40;
+
+    private boolean flying;
+    private int takeOffTicks;
 
     public BlastZombie(EntityType<? extends Zombie> type, Level level) {
         super(type, level);
-        this.setNoGravity(true);
         this.setPersistenceRequired();
-        // 装备
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TNT));
         this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.FLINT_AND_STEEL));
         this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.ELYTRA));
         this.setDropChance(EquipmentSlot.MAINHAND, 0.0F);
         this.setDropChance(EquipmentSlot.OFFHAND, 0.0F);
         this.setDropChance(EquipmentSlot.CHEST, 0.0F);
-        // 替换 AI：飞行追逐 + 接近引爆
         this.goalSelector.removeAllGoals(goal -> true);
         this.targetSelector.removeAllGoals(goal -> true);
-        this.moveControl = new BlastFlightMoveControl(this);
+        this.moveControl = new BlastMoveControl(this);
         this.goalSelector.addGoal(1, new BlastAttackGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false));
+        var followRange = this.getAttribute(Attributes.FOLLOW_RANGE);
+        if (followRange != null) {
+            followRange.setBaseValue(96.0);
+        }
+    }
+
+    public boolean isFlying() {
+        return this.flying;
+    }
+
+    public void setFlying(boolean flying) {
+        if (this.flying != flying) {
+            this.flying = flying;
+            this.setNoGravity(flying);
+            if (flying) {
+                this.setSharedFlag(FLAG_FALL_FLYING, true);
+                this.takeOffTicks = TAKE_OFF_TICKS;
+            } else {
+                this.setSharedFlag(FLAG_FALL_FLYING, false);
+            }
+        }
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new FlyingPathNavigation(this, level);
+    protected void addBehaviourGoals() {
     }
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         if (source.is(DamageTypes.EXPLOSION) || source.is(DamageTypes.PLAYER_EXPLOSION)) {
-            return false; // 免疫所有爆炸伤害
+            return false;
         }
         return super.hurtServer(level, source, amount);
     }
 
-    /** 飞行移动控制：直线加速飞向寻路目标点 */
-    private static class BlastFlightMoveControl extends MoveControl {
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.takeOffTicks > 0 && --this.takeOffTicks == 0) {
+            this.setSharedFlag(FLAG_FALL_FLYING, false);
+        }
+    }
+
+    private static class BlastMoveControl extends MoveControl {
         private final BlastZombie mob;
 
-        BlastFlightMoveControl(BlastZombie mob) {
+        BlastMoveControl(BlastZombie mob) {
             super(mob);
             this.mob = mob;
         }
 
         @Override
         public void tick() {
+            if (!this.mob.isFlying()) {
+                super.tick();
+                return;
+            }
             if (this.operation != Operation.MOVE_TO) {
+                mob.setSpeed(0.0F);
                 return;
             }
             Vec3 delta = new Vec3(this.getWantedX() - mob.getX(), this.getWantedY() - mob.getY(), this.getWantedZ() - mob.getZ());
             double len = delta.length();
             if (len < 0.6) {
                 mob.setSpeed(0.0F);
+                mob.setDeltaMovement(Vec3.ZERO);
                 return;
             }
+            mob.setSpeed(0.8F);
             mob.setDeltaMovement(mob.getDeltaMovement().scale(0.85).add(delta.scale(0.05)));
             mob.setYRot(-(float) (Mth.atan2(delta.x, delta.z) * (180.0 / Math.PI)));
             mob.yBodyRot = mob.getYRot();
         }
     }
 
-    /** 攻击：飞向玩家，接近 3 格内引爆 AoE（不破坏地形） */
     private class BlastAttackGoal extends Goal {
         private final BlastZombie mob;
         private int cooldown;
@@ -114,6 +138,7 @@ public class BlastZombie extends Zombie {
 
         @Override
         public void stop() {
+            this.mob.setFlying(false);
             this.mob.setTarget(null);
         }
 
@@ -123,10 +148,16 @@ public class BlastZombie extends Zombie {
             if (target == null) {
                 return;
             }
-            if (this.mob.distanceToSqr(target) < 9.0) {
+            double dSq = this.mob.distanceToSqr(target);
+            if (dSq < EXPLODE_RANGE_SQ) {
+                this.mob.setFlying(false);
                 explodeNearby();
-                this.cooldown = ATTACK_COOLDOWN;
+                this.cooldown = (int) ATTACK_COOLDOWN;
+            } else if (dSq > WALK_RANGE_SQ) {
+                this.mob.setFlying(true);
+                this.mob.getMoveControl().setWantedPosition(target.getX(), target.getY() + 1.0, target.getZ(), 1.0);
             } else {
+                this.mob.setFlying(false);
                 this.mob.getNavigation().moveTo(target, 1.0);
             }
         }
@@ -136,7 +167,7 @@ public class BlastZombie extends Zombie {
             level.sendParticles(ParticleTypes.EXPLOSION,
                     this.mob.getX(), this.mob.getY(), this.mob.getZ(), 1, 0.0, 0.0, 0.0, 0.0);
             for (Player p : level.players()) {
-                if (p.distanceToSqr(this.mob) < ATTACK_RANGE * ATTACK_RANGE) {
+                if (p.distanceToSqr(this.mob) < 36.0) {
                     p.hurtServer(level, level.damageSources().explosion(this.mob, this.mob), 6.0F);
                 }
             }

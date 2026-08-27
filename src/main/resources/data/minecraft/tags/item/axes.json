@@ -2,6 +2,7 @@
     "replace": false,
     "values": [
         "blockrooms:ruby_axe",
-        "blockrooms:string_axe"
+        "blockrooms:string_axe",
+        "blockrooms:soul_alloy_axe"
     ]
 }

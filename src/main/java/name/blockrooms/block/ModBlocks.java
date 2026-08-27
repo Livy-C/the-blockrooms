@@ -93,7 +93,6 @@ public class ModBlocks {
                     .mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM)
                     .strength(2.0F, 6.0F)
     );
-    /** 能下落的石头方块（沙子式下落，继承 SandBlock） */
     public static final DeferredBlock<FallableBlock> FALLABLE_STONE = BLOCKS.registerBlock(
             "fallable_stone",
             properties -> new FallableBlock(new ColorRGBA(0xFF9C9C9C), properties),

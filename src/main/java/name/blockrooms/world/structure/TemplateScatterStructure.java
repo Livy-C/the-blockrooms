@@ -9,18 +9,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 
 import java.util.Optional;
 
-/**
- * 基于 NBT 模板的散布结构基类：为每个模板派生一个子类，只需提供模板 ID、
- * 尺寸、锚点 Y 偏移与盐值。
- *
- * <p>锚点 X/Z 取区块内 [2, 13] 的确定性随机偏移（种子+区块坐标+盐值推导，
- * 跨区块/重载一致），朝向随机 0~3；锚点 Y = OCEAN_FLOOR 高度图 + 子类偏移，
- * 使结构底部贴合地面/河床。</p>
- *
- * <p>默认 {@link #spacing()} 为 1（不门控，每个区块都返回生成点），保证
- * {@code /place structure blockrooms:<id>} 一定可以放置；需要自然生成的结构
- * 请覆盖 {@link #spacing()} 并添加对应 structure_set JSON。</p>
- */
 public abstract class TemplateScatterStructure extends Structure {
 
     private static final int MIN_OFFSET = 2;
@@ -30,27 +18,18 @@ public abstract class TemplateScatterStructure extends Structure {
         super(settings);
     }
 
-    /** 模板 ID，对应 {@code data/blockrooms/structure/<id>.nbt}。 */
     protected abstract Identifier templateId();
 
-    /** 模板尺寸（x/y/z，格）。用于生成部件的包围盒。 */
     protected abstract int sizeX();
 
     protected abstract int sizeY();
 
     protected abstract int sizeZ();
 
-    /** 锚点 Y = OCEAN_FLOOR 高度图 + 该偏移。 */
     protected abstract int anchorYOffset();
 
-    /** 散布哈希的盐值（每个结构唯一）。 */
     protected abstract long salt();
 
-    /**
-     * 生成间距（区块）：只有 {@code hash % spacing == 0} 的区块才生成。
-     * 默认 1 = 每个区块都生成（保证 {@code /place structure} 一定成功）；
-     * 需要自然生成的结构请覆盖为更大值（参考 {@link OakExitStructure} 的 16）。
-     */
     protected long spacing() {
         return 1;
     }

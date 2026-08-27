@@ -45,7 +45,6 @@ public final class TanTemperatureCompat implements IPositionalTemperatureModifie
         if (worn == 0) {
             return current;
         }
-        // 每穿一件向常温（NEUTRAL）拉近 1 级 → 目标等级
         TemperatureLevel target = current;
         for (int i = 0; i < worn; i++) {
             if (target.ordinal() > TemperatureLevel.NEUTRAL.ordinal()) {
@@ -56,7 +55,6 @@ public final class TanTemperatureCompat implements IPositionalTemperatureModifie
                 break;
             }
         }
-        // 平滑渐变：每 GRADIENT_INTERVAL tick 向目标移动 1 级（服务端），不瞬移
         if (!player.level().isClientSide() && target != current && player.tickCount % GRADIENT_INTERVAL == 0) {
             ITemperature data = TemperatureHelper.getTemperatureData(player);
             TemperatureLevel level = data.getLevel();

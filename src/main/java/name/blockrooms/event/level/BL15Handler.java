@@ -54,7 +54,7 @@ public class BL15Handler {
         h = (h ^ (h >>> 33)) * 0xBF58476D1CE4E5B9L;
         h = (h ^ (h >>> 29)) * 0x94D049BB133111EBL;
         h = (h ^ (h >>> 32)) & Long.MAX_VALUE;
-        int dx = 2 + (int) (h % 6);       // 2..7 组
+        int dx = 2 + (int) (h % 6);
         int dz = 2 + (int) ((h >>> 8) % 6);
         if ((h & 1) == 0) dx = -dx; else dz = -dz;
         int gx = gx0 + dx;

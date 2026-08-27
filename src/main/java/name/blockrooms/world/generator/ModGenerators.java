@@ -32,5 +32,7 @@ ModGenerators {
             CHUNK_GENERATORS.register("blocklevel303_generator", () -> BlockLevel303Generator.CODEC);
     private static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> SECRET_PLACE_GENERATOR =
             CHUNK_GENERATORS.register("secret_place_generator", () -> SecretPlaceGenerator.CODEC);
+    private static final DeferredHolder<MapCodec<? extends ChunkGenerator>, MapCodec<? extends ChunkGenerator>> BL542_GENERATOR =
+            CHUNK_GENERATORS.register("blocklevel542_generator", () -> BlockLevel542Generator.CODEC);
     public static void register(IEventBus eventBus) { CHUNK_GENERATORS.register(eventBus); }
 }

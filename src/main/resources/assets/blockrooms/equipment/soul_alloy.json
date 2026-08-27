@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "humanoid": [
+      { "texture": "blockrooms:soul_alloy" }
+    ],
+    "humanoid_leggings": [
+      { "texture": "blockrooms:soul_alloy" }
+    ]
+  }
+}

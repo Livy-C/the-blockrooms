@@ -1,9 +1,0 @@
-{
-    "type": "blockrooms:quartz_beta_base",
-    "biomes": [
-        "blockrooms:blocklevel1"
-    ],
-    "spawn_overrides": {},
-    "step": "surface_structures",
-    "terrain_adaptation": "none"
-}

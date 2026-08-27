@@ -38,16 +38,11 @@ import java.util.concurrent.CompletableFuture;
 public class BlockLevelNullGenerator extends BaseBlockLevelGenerator {
 
     public static final int PLATFORM_HALF = 16;
-    /** 平台石头层 y */
     public static final int PLATFORM_Y = 0;
-    /** 中心木桶位置（平台正中心上方） */
     public static final BlockPos BARREL_POS = new BlockPos(0, 1, 0);
 
-    /** 虚无之船锚点（平台南方虚空上方，悬浮） */
     public static final BlockPos VOID_BOAT_ORIGIN = new BlockPos(0, 24, 96);
-    /** 虚无之船模板 */
     private static final Identifier VOID_BOAT_TEMPLATE = Identifier.fromNamespaceAndPath(Blockrooms.MODID, "void_boat");
-    /** 船上黑石潜伏者数量与位置（相对锚点的近似位置，模板 13×23×28） */
     private static final BlockPos[] SHULKER_SPOTS = {
             new BlockPos(6, 6, 8), new BlockPos(2, 6, 18), new BlockPos(10, 6, 18)
     };
@@ -92,7 +87,6 @@ public class BlockLevelNullGenerator extends BaseBlockLevelGenerator {
 
     @Override
     public void spawnOriginalMobs(WorldGenRegion level) {
-        // 平台中心放置木桶（SPAWN 阶段禁止 WorldGenRegion.setBlock，直接写 ChunkAccess）
         ChunkPos cp = level.getCenter();
         if (cp.x == 0 && cp.z == 0) {
             ChunkAccess chunk = level.getChunk(cp.x, cp.z);
@@ -123,14 +117,10 @@ public class BlockLevelNullGenerator extends BaseBlockLevelGenerator {
             return;
         }
         BlockPos origin = VOID_BOAT_ORIGIN;
-        // 忽略结构方块（数据标记方块不放置，只作定位点）——原版末地船同款 processor
         StructurePlaceSettings settings = new StructurePlaceSettings()
                 .addProcessor(BlockIgnoreProcessor.STRUCTURE_BLOCK);
         template.placeInWorld(level, origin, origin, settings, level.getRandom(), Block.UPDATE_NONE);
 
-        // 拼图方块标记（原版结构方块 DATA 模式已移除，用拼图方块 name 代替）：
-        // name 含 "elytra" → 鞘翅展示框；name 含 "sentry" → 黑石潜伏者。
-        // 拼图方块本身替换为黑石（船身材质），作为展示框挂点。
         boolean hasMarkers = false;
         for (StructureTemplate.JigsawBlockInfo jigsaw : template.getJigsaws(origin, Rotation.NONE)) {
             BlockPos p = jigsaw.info().pos();
@@ -153,7 +143,6 @@ public class BlockLevelNullGenerator extends BaseBlockLevelGenerator {
             }
         }
 
-        // 模板没有标记时的兜底：固定位置潜伏者 + 扫描鞘翅挂点
         if (!hasMarkers) {
             for (BlockPos spot : SHULKER_SPOTS) {
                 BlockPos p = origin.offset(spot);

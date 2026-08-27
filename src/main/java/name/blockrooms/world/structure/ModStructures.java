@@ -16,18 +16,10 @@ public class ModStructures {
     public static final DeferredRegister<StructurePieceType> STRUCTURE_PIECE_TYPES =
             DeferredRegister.create(Registries.STRUCTURE_PIECE, Blockrooms.MODID);
 
-    public static final DeferredHolder<StructureType<?>, StructureType<BlockLevel0OutpostStructure>> BMEG_OUTPOST_TYPE =
-            STRUCTURE_TYPES.register("bmeg_outpost", () -> structureType(BlockLevel0OutpostStructure.CODEC));
-    public static final DeferredHolder<StructurePieceType, StructurePieceType> BMEG_OUTPOST_PIECE_TYPE =
-            STRUCTURE_PIECE_TYPES.register("bmeg_outpost_piece", () -> (StructurePieceType.ContextlessType) BlockLevel0OutpostPiece::new);
-    public static final DeferredHolder<StructureType<?>, StructureType<BlockLevel1BetaBaseStructure>> BETA_BASE_TYPE =
-            STRUCTURE_TYPES.register("quartz_beta_base", () -> structureType(BlockLevel1BetaBaseStructure.CODEC));
-    public static final DeferredHolder<StructurePieceType, StructurePieceType> BETA_BASE_PIECE_TYPE =
-            STRUCTURE_PIECE_TYPES.register("quartz_beta_base_piece", () -> (StructurePieceType.ContextlessType) BlockLevel1BetaBasePiece::new);
-    public static final DeferredHolder<StructureType<?>, StructureType<OakExitStructure>> OAK_EXIT_TYPE =
-            STRUCTURE_TYPES.register("oak_exit", () -> structureType(OakExitStructure.CODEC));
-    public static final DeferredHolder<StructurePieceType, StructurePieceType> OAK_EXIT_PIECE_TYPE =
-            STRUCTURE_PIECE_TYPES.register("oak_exit_piece", () -> (StructurePieceType.StructureTemplateType) OakExitPiece::new);
+    public static final DeferredHolder<StructureType<?>, StructureType<Bl0ExitStructure>> BL0_EXIT_TYPE =
+            STRUCTURE_TYPES.register("bl0_exit", () -> structureType(Bl0ExitStructure.CODEC));
+    public static final DeferredHolder<StructurePieceType, StructurePieceType> BL0_EXIT_PIECE_TYPE =
+            STRUCTURE_PIECE_TYPES.register("bl0_exit_piece", () -> (StructurePieceType.StructureTemplateType) Bl0ExitPiece::new);
     public static final DeferredHolder<StructureType<?>, StructureType<SpruceDoorStructure>> SPRUCE_DOOR_TYPE =
             STRUCTURE_TYPES.register("spruce_door", () -> structureType(SpruceDoorStructure.CODEC));
     public static final DeferredHolder<StructureType<?>, StructureType<QuartzDoorStructure>> QUARTZ_DOOR_TYPE =

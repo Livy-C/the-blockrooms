@@ -32,14 +32,10 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
 
     public static final int BEDROCK_Y = 0;
     public static final int GROUND_Y = 1;
-    /** 网格尺寸：每 64×64 格一个候选拱门，锚点在网格内随机偏移 */
     public static final int ARCH_GRID = 64;
-    /** 拱门高度范围（格）：5 ~ 100 */
     public static final int ARCH_MIN_H = 5;
     public static final int ARCH_MAX_H = 100;
-    /** 拱门最小跨度（格） */
     public static final int ARCH_MIN_SPAN = 3;
-    /** 锚点相对网格中心的最大随机偏移（格） */
     public static final int ANCHOR_OFFSET = 24;
 
     public static final ResourceKey<LootTable> BL15_LOOT = ResourceKey.create(
@@ -87,12 +83,10 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
-    // ---------- 拱门 ----------
     private record ArchInfo(long seed, int gx, int gz, int ax, int az, int dx, int dz, int span, int h) {
     }
 
     private void placeArchIfPresent(WorldGenLevel level, ChunkAccess chunk, ChunkPos cp, long seed) {
-        // 拱门最长约 126 格（锚点偏移 24 + 跨度 100 + 柱 2），检查周围 ±2 网格足够覆盖
         int gx0 = Math.floorDiv(cp.getMinBlockX(), ARCH_GRID);
         int gz0 = Math.floorDiv(cp.getMinBlockZ(), ARCH_GRID);
         for (int gx = gx0 - 2; gx <= gx0 + 2; gx++) {
@@ -105,10 +99,6 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
         }
     }
 
-    /**
-     * 把拱门落在本区块内的部分写入（纯几何判定：每个区块只生成自己范围内的方块，
-     * 因此跨区块的长拱门也能完整生成）。
-     */
     private static void placeArchPart(WorldGenLevel level, ChunkAccess chunk, ArchInfo a) {
         int minX = chunk.getPos().getMinBlockX();
         int minZ = chunk.getPos().getMinBlockZ();
@@ -118,14 +108,12 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
                 if (type == 0) {
                     continue;
                 }
-                // 柱：GROUND_Y .. h+2（实心到顶）；梁：h+1 .. h+2（厚 2）
                 int yStart = (type == 1) ? GROUND_Y : GROUND_Y + a.h + 1;
                 for (int y = yStart; y <= GROUND_Y + a.h + 2; y++) {
                     level.setBlock(new BlockPos(x, y, z), Blocks.TUFF.defaultBlockState(), Block.UPDATE_NONE);
                 }
             }
         }
-        // 补给箱：横梁中点上方，约 1/3 概率
         if (hash(a.seed(), a.gx(), a.gz(), 0x35) % 3 == 0) {
             int midX = a.ax() + a.dx() * (a.span() / 2);
             int midZ = a.az() + a.dz() * (a.span() / 2);
@@ -141,10 +129,6 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
         }
     }
 
-    /**
-     * (x, z) 列在拱门中的结构类型：0 = 无，1 = 柱，2 = 梁。
-     * 结构在水平面上是沿方向延伸的 2 宽矩形条：t 为沿方向投影、w 为垂直投影（0/1 两列）。
-     */
     private static int columnType(ArchInfo a, int x, int z) {
         int tx = x - a.ax();
         int tz = z - a.az();
@@ -165,35 +149,29 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
         return 0;
     }
 
-    /** 拱门是否存在于该网格（确定性，70%） */
     public static boolean archExists(long seed, int gx, int gz) {
         return hash(seed, gx, gz, 0x15) % 10 < 7;
     }
 
-    /** 拱门高度（确定性，5~100） */
     public static int archHeight(long seed, int gx, int gz) {
         return ARCH_MIN_H + (int) (hash(seed, gx, gz, 0x25) % (ARCH_MAX_H - ARCH_MIN_H + 1));
     }
 
-    /** 拱门跨度（确定性，3~高度，长度不超过高度） */
     public static int archSpan(long seed, int gx, int gz) {
         int h = archHeight(seed, gx, gz);
         return ARCH_MIN_SPAN + (int) (hash(seed, gx, gz, 0x75) % (h - ARCH_MIN_SPAN + 1));
     }
 
-    /** 拱门方向（确定性，0=北 1=东 2=南 3=西） */
     public static int archDirection(long seed, int gx, int gz) {
         return (int) (hash(seed, gx, gz, 0x85) % 4);
     }
 
-    /** 拱门锚点（网格中心 + 随机偏移） */
     public static BlockPos archAnchor(long seed, int gx, int gz) {
         int ax = gx * ARCH_GRID + ARCH_GRID / 2 + (int) (hash(seed, gx, gz, 0x95) % (ANCHOR_OFFSET * 2 + 1)) - ANCHOR_OFFSET;
         int az = gz * ARCH_GRID + ARCH_GRID / 2 + (int) (hash(seed, gx, gz, 0xA5) % (ANCHOR_OFFSET * 2 + 1)) - ANCHOR_OFFSET;
         return new BlockPos(ax, 0, az);
     }
 
-    /** 横梁中点上方（补给箱/传送落点） */
     public static BlockPos archMidTop(long seed, int gx, int gz) {
         ArchInfo a = archInfo(seed, gx, gz);
         return new BlockPos(
@@ -221,7 +199,6 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
                 archSpan(seed, gx, gz), archHeight(seed, gx, gz));
     }
 
-    // ---------- 传送点 ----------
 
     private void placePortalPoint(WorldGenLevel level, ChunkAccess chunk, ChunkPos cp, long seed) {
         int px = 2 + (int) (hash(seed, cp.x, cp.z, 0x45) % 12);
@@ -231,7 +208,6 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
         level.setBlock(pos, Blocks.END_PORTAL.defaultBlockState(), Block.UPDATE_NONE);
     }
 
-    // ---------- 十字水坑 ----------
 
     private void placeWaterCross(WorldGenLevel level, ChunkAccess chunk, ChunkPos cp, long seed) {
         int wx = 3 + (int) (hash(seed, cp.x, cp.z, 0x65) % 10);
@@ -246,7 +222,6 @@ public class BlockLevel15Generator extends BaseBlockLevelGenerator {
         level.setBlock(c.east().east(), water, Block.UPDATE_NONE);
     }
 
-    // ---------- 工具 ----------
 
     private static long hash(long seed, int a, int b, long salt) {
         long h = seed ^ (a * 0x9E3779B97F4A7C15L) ^ (b * 0xBF58476D1CE4E5B9L) ^ salt;

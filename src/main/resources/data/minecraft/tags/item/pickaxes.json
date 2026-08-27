@@ -1,6 +1,7 @@
 {
     "replace": false,
     "values": [
-        "blockrooms:ruby_pickaxe"
+        "blockrooms:ruby_pickaxe",
+        "blockrooms:soul_alloy_pickaxe"
     ]
 }

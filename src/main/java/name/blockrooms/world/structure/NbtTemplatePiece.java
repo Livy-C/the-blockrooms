@@ -18,18 +18,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
-/**
- * 通用 NBT 模板结构部件：按 {@link #templateId} 从模板管理器加载
- * {@code data/blockrooms/structure/<id>.nbt} 并放置到锚点位置。
- *
- * <p>供所有"模板即结构"的类型共用（废弃营地、村民小屋、木筏、海床洞穴、
- * 虚空之船等），模板 ID 与锚点/朝向随 NBT 序列化，跨区块生成与重载保持一致。
- * 模板缺失时 {@link StructureTemplateManager#getOrCreate} 返回空模板，
- * 部件什么都不生成、不会崩溃。</p>
- *
- * <p>支持跨区块模板：{@code StructureStart} 会对每个与部件包围盒相交的区块
- * 调用 {@link #postProcess}，模板放置按传入的区块 box 裁剪。</p>
- */
 public class NbtTemplatePiece extends StructurePiece {
     private static final String TEMPLATE_TAG = "TID";
     private static final String ANCHOR_X_TAG = "AX";
@@ -40,7 +28,7 @@ public class NbtTemplatePiece extends StructurePiece {
     private final Identifier templateId;
     private final BlockPos anchor;
     private final Rotation rotation;
-    private StructureTemplate template; // 懒加载（首次 postProcess 时从模板管理器读取）
+    private StructureTemplate template;
 
     public NbtTemplatePiece(Identifier templateId, BlockPos anchor, Rotation rotation,
                             int sizeX, int sizeY, int sizeZ) {
@@ -51,7 +39,6 @@ public class NbtTemplatePiece extends StructurePiece {
         this.rotation = rotation;
     }
 
-    /** 反序列化（经 {@link StructurePieceType.StructureTemplateType} 工厂调用）。 */
     public NbtTemplatePiece(StructureTemplateManager templates, CompoundTag tag) {
         super(ModStructures.NBT_TEMPLATE_PIECE_TYPE.get(), tag);
         this.templateId = Identifier.parse(tag.getStringOr(TEMPLATE_TAG, ""));

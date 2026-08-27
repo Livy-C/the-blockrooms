@@ -8,6 +8,7 @@ import name.blockrooms.client.renderer.BlockProjectileRenderer;
 import name.blockrooms.client.renderer.BloodZombieRenderer;
 import name.blockrooms.client.renderer.ItemProjectileRenderer;
 import name.blockrooms.entity.ModEntities;
+import net.minecraft.client.renderer.entity.SkeletonRenderer;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -38,12 +39,11 @@ public class BlockroomsClient {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(ModEntities.BLOCK_PROJECTILE.get(), BlockProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.ITEM_PROJECTILE.get(), ItemProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SKELETON.get(), SkeletonRenderer::new);
         event.registerEntityRenderer(ModEntities.BLOOD_ZOMBIE.get(), BloodZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.BLACKSTONE_SHULKER.get(), BlackstoneShulkerRenderer::new);
-        // 秘密实体一号：暂用原版恼鬼渲染器占位
         event.registerEntityRenderer(ModEntities.SECRET_ENTITY_ONE.get(),
                 net.minecraft.client.renderer.entity.VexRenderer::new);
-        // BL13.8 实体：暂用原版渲染器（纹理为复制的原版占位，之后可替换）
         event.registerEntityRenderer(ModEntities.BLAST_ZOMBIE.get(),
                 net.minecraft.client.renderer.entity.ZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.SCULK_CREEPER.get(),

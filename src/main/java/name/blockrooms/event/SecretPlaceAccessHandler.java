@@ -6,10 +6,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
 
-/**
- * 秘密地点传送拦截：未解锁玩家通过任何途径（指令以外的传送代码等）
- * 尝试进入 secret_place 维度时被取消。
- */
 @EventBusSubscriber
 public class SecretPlaceAccessHandler {
     @SubscribeEvent

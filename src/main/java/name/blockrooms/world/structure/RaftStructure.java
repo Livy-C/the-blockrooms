@@ -5,11 +5,6 @@ import name.blockrooms.Blockrooms;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 
-/**
- * 木筏（橡木筏，含酿造台与红石灯）。
- * 模板：{@code data/blockrooms/structure/raft.nbt}（9×6×6）。
- * 只注册、暂不自然生成；锚点略高于 OCEAN_FLOOR 高度图，便于放在水面附近。
- */
 public class RaftStructure extends TemplateScatterStructure {
     public static final MapCodec<RaftStructure> CODEC = simpleCodec(RaftStructure::new);
     private static final long SALT = 0x1BADC0DE00000003L;
@@ -40,7 +35,7 @@ public class RaftStructure extends TemplateScatterStructure {
 
     @Override
     protected int anchorYOffset() {
-        return 1; // 贴水底/地面之上
+        return 1;
     }
 
     @Override

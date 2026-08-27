@@ -34,13 +34,11 @@ public class ScreenshotMixin {
         return mc.level != null && mc.level.dimension().equals(ModLevels.SITE_404);
     }
 
-    /** 故障化：扫描线错位 + 随机色块 + 通道轮换 */
     private static void glitchImage(NativeImage image) {
         int w = image.getWidth();
         int h = image.getHeight();
         RandomSource random = RandomSource.create();
 
-        // 1. 扫描线错位：随机水平条带整体平移
         for (int b = 0; b < 24; b++) {
             int y = random.nextInt(h);
             int bandH = 1 + random.nextInt(6);
@@ -56,7 +54,6 @@ public class ScreenshotMixin {
             }
         }
 
-        // 2. 随机色块
         for (int r = 0; r < 16; r++) {
             int rx = random.nextInt(w);
             int ry = random.nextInt(h);
@@ -70,7 +67,6 @@ public class ScreenshotMixin {
             }
         }
 
-        // 3. 通道错位：每隔几行 RGB 轮换
         for (int yy = 0; yy < h; yy += 2 + random.nextInt(5)) {
             for (int x = 0; x < w; x++) {
                 int c = image.getPixel(x, yy);

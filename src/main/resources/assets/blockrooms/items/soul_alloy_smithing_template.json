@@ -1,0 +1,6 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "blockrooms:item/soul_alloy_smithing_template"
+    }
+}

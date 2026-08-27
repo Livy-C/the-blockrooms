@@ -49,8 +49,6 @@ public class TeleportUtils {
 
     private static boolean teleportTo(ServerPlayer player, ServerLevel level, Vec3 vec) {
         boolean ok = player.teleportTo(level, vec.x, vec.y, vec.z, Set.of(), player.getYRot(), player.getXRot(), true);
-        // 重置下落状态：清除累计摔落距离与下落速度，
-        // 防止传送（如掉出虚空）后落地时仍按原下落距离结算摔落伤害
         player.fallDistance = 0.0F;
         player.setDeltaMovement(Vec3.ZERO);
         return ok;

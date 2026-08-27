@@ -1,17 +1,7 @@
 {
-  "type": "blockrooms:crafting_error",
-  "category": "equipment",
-  "key": {
-    "I": "blockrooms:soul_alloy_ingot",
-    "S": "blockrooms:soul_alloy_stick"
-  },
-  "pattern": [
-    "I I",
-    "ISI",
-    " S "
-  ],
-  "result": {
-    "count": 1,
-    "id": "blockrooms:soul_alloy_pickaxe"
-  }
+  "type": "minecraft:smithing_transform",
+  "addition": "blockrooms:soul_alloy_ingot",
+  "base": "minecraft:iron_pickaxe",
+  "result": { "id": "blockrooms:soul_alloy_pickaxe" },
+  "template": "blockrooms:soul_alloy_smithing_template"
 }

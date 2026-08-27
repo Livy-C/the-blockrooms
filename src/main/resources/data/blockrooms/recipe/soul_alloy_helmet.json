@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "blockrooms:soul_alloy_ingot",
+  "base": "minecraft:iron_helmet",
+  "result": { "id": "blockrooms:soul_alloy_helmet" },
+  "template": "blockrooms:soul_alloy_smithing_template"
+}

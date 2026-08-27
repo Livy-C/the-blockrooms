@@ -29,35 +29,18 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * BlockLevel 3「远古矿道」——塔楼式生成：
- *
- * <ul>
- *   <li>世界 = 垂直堆叠的楼层（每层 5 格高，与投稿模板高度一致）；</li>
- *   <li>每层 = 16×16 平面：沿 X/Z 的 5 宽通道（边哈希连通，每层独立）+ 投稿模板
- *       （drive/across/junction/假出口/激光房/音乐房）；未覆盖区域为实心石头；</li>
- *   <li>层间用梯子竖井链接（哈希选择通道内一点，竖直打通并挂梯子）；</li>
- *   <li>陷阱竖井（trap，高 17）只生成在高楼层（y ≥ 60，向下延伸穿过数层）；</li>
- *   <li>冒险模式、下层机制、昼夜异常等暂缓。</li>
- * </ul>
- */
 public class BlockLevel3Generator extends BaseBlockLevelGenerator {
 
-    /** 楼层高度（模板高度） */
     public static final int LAYER_HEIGHT = 5;
-    /** 通道范围（5 宽，中心线 7） */
     public static final int TUNNEL_MIN = 5;
     public static final int TUNNEL_MAX = 9;
-    /** 陷阱竖井只生成在 y ≥ TRAP_MIN_Y 的楼层（其高度 17，向下延伸） */
     public static final int TRAP_MIN_Y = 60;
 
-    /** 通道段模板（沿 X） */
     private static final Identifier[] DRIVE_TEMPLATES = {
             id("bl3_drive1"), id("bl3_drive2"), id("bl3_drive2_notramcar"), id("bl3_drive3"),
             id("bl3_drive3_box"), id("bl3_drive4_button"), id("bl3_drive4_button2"),
             id("bl3_drive_dark1"), id("bl3_drive_dark2"), id("bl3_drive_dark2_notramcar")
     };
-    /** 横向通道模板（沿 Z） */
     private static final Identifier[] ACROSS_TEMPLATES = {
             id("bl3_across_drive1"), id("bl3_across_drive2"), id("bl3_across_drive2_notramcar"),
             id("bl3_across_drive2_notramcar2"), id("bl3_across_drive3_button"),
@@ -114,7 +97,6 @@ public class BlockLevel3Generator extends BaseBlockLevelGenerator {
         super.applyBiomeDecoration(level, chunk, structureManager);
     }
 
-    // ---------- 楼层生成 ----------
 
     private void generateLayer(WorldGenLevel level, ChunkAccess chunk, ChunkPos cp, long seed, int layer, int baseY) {
         boolean east = edgeOpen(seed, cp.x, cp.z, layer, Direction.EAST);
@@ -177,10 +159,8 @@ public class BlockLevel3Generator extends BaseBlockLevelGenerator {
             }
         }
 
-        // 墙内矿石（每层少量）
         placeOres(chunk, cp, seed, layer, baseY, xTunnel, zTunnel);
 
-        // 运输矿车（约 1/28 层）
         if (hash(seed, cp, layer, 0, 0x33) % 28 == 0 && (xTunnel || zTunnel)) {
             int mx, mz;
             if (xTunnel) {
@@ -234,7 +214,6 @@ public class BlockLevel3Generator extends BaseBlockLevelGenerator {
         }
     }
 
-    // ---------- 模板放置 ----------
 
     private void placeLayerTemplates(WorldGenLevel level, ChunkAccess chunk, ChunkPos cp, long seed,
                                      int layer, int baseY, boolean xTunnel, boolean zTunnel) {
@@ -258,11 +237,11 @@ public class BlockLevel3Generator extends BaseBlockLevelGenerator {
         if (hash(seed, cp, layer, 7, 0x11) % 30 == 0) {
             int pick = (int) (hash(seed, cp, layer, 8, 0x22) % 4);
             if (pick == 0 && xTunnel) {
-                placeTemplate(manager, level, SPECIAL_X[0], new BlockPos(minX, baseY, minZ + TUNNEL_MIN)); // 假出口
+                placeTemplate(manager, level, SPECIAL_X[0], new BlockPos(minX, baseY, minZ + TUNNEL_MIN));
             } else if (pick == 1 && zTunnel) {
-                placeTemplate(manager, level, SPECIAL_Z, new BlockPos(minX + TUNNEL_MIN, baseY, minZ + 3)); // 激光奖励房
+                placeTemplate(manager, level, SPECIAL_Z, new BlockPos(minX + TUNNEL_MIN, baseY, minZ + 3));
             } else if (pick == 2 && xTunnel) {
-                placeTemplate(manager, level, SPECIAL_X[1], new BlockPos(minX + 3, baseY, minZ + TUNNEL_MIN)); // 音乐房间
+                placeTemplate(manager, level, SPECIAL_X[1], new BlockPos(minX + 3, baseY, minZ + TUNNEL_MIN));
             } else if (pick == 3 && baseY >= TRAP_MIN_Y) {
                 placeTemplate(manager, level, TRAP, new BlockPos(minX + 4, baseY, minZ + TUNNEL_MIN));
             }
@@ -279,7 +258,6 @@ public class BlockLevel3Generator extends BaseBlockLevelGenerator {
         template.placeInWorld(level, origin, origin, new StructurePlaceSettings(), level.getRandom(), Block.UPDATE_NONE);
     }
 
-    // ---------- 边哈希 ----------
     private static boolean edgeOpen(long seed, int chunkX, int chunkZ, int layer, Direction dir) {
         int ex = chunkX;
         int ez = chunkZ;
