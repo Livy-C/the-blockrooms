@@ -6,6 +6,7 @@ import name.blockrooms.entity.ModEntities;
 import name.blockrooms.item.consumables.DamageEffect;
 import name.blockrooms.item.impl.GlowstoneLanternItem;
 import name.blockrooms.item.impl.GunBowItem;
+import name.blockrooms.item.impl.RevivalArmorItem;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -183,6 +184,23 @@ public class ModItems {
             ITEMS.registerSimpleItem("heat_insulation_leggings", properties -> properties.humanoidArmor(ModArmorMaterials.HEAT_INSULATION, ArmorType.LEGGINGS));
     public static final DeferredItem<Item> HEAT_INSULATION_BOOTS =
             ITEMS.registerSimpleItem("heat_insulation_boots", properties -> properties.humanoidArmor(ModArmorMaterials.HEAT_INSULATION, ArmorType.BOOTS));
+
+    public static final DeferredItem<Item> REVIVAL_HELMET =
+            ITEMS.registerItem("revival_helmet",
+                    p -> new RevivalArmorItem(ModArmorMaterials.REVIVAL, ArmorType.HELMET, 3.0F, p),
+                    properties -> properties.stacksTo(1));
+    public static final DeferredItem<Item> REVIVAL_CHESTPLATE =
+            ITEMS.registerItem("revival_chestplate",
+                    p -> new RevivalArmorItem(ModArmorMaterials.REVIVAL, ArmorType.CHESTPLATE, 4.0F, p),
+                    properties -> properties.stacksTo(1));
+    public static final DeferredItem<Item> REVIVAL_LEGGINGS =
+            ITEMS.registerItem("revival_leggings",
+                    p -> new RevivalArmorItem(ModArmorMaterials.REVIVAL, ArmorType.LEGGINGS, 3.5F, p),
+                    properties -> properties.stacksTo(1));
+    public static final DeferredItem<Item> REVIVAL_BOOTS =
+            ITEMS.registerItem("revival_boots",
+                    p -> new RevivalArmorItem(ModArmorMaterials.REVIVAL, ArmorType.BOOTS, 2.5F, p),
+                    properties -> properties.stacksTo(1));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

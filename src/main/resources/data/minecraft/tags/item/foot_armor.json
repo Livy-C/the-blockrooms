@@ -1,7 +1,8 @@
-{
-    "replace": false,
-    "values": [
-        "blockrooms:soul_alloy_boots",
-        "blockrooms:heat_insulation_boots"
-    ]
+﻿{
+    "replace":  false,
+    "values":  [
+                   "blockrooms:soul_alloy_boots",
+                   "blockrooms:heat_insulation_boots",
+                   "blockrooms:revival_boots"
+               ]
 }

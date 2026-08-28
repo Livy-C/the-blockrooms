@@ -1,7 +1,8 @@
-{
-    "replace": false,
-    "values": [
-        "blockrooms:soul_alloy_leggings",
-        "blockrooms:heat_insulation_leggings"
-    ]
+﻿{
+    "replace":  false,
+    "values":  [
+                   "blockrooms:soul_alloy_leggings",
+                   "blockrooms:heat_insulation_leggings",
+                   "blockrooms:revival_leggings"
+               ]
 }

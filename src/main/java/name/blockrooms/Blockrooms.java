@@ -9,6 +9,7 @@ import name.blockrooms.effect.ModMobEffects;
 import name.blockrooms.entity.BloodZombie;
 import name.blockrooms.entity.EnhancedSkeleton;
 import name.blockrooms.entity.ModEntities;
+import name.blockrooms.entity.secret.SecretEntityOne;
 import name.blockrooms.item.ModCreativeModeTabs;
 import name.blockrooms.item.ModItems;
 import name.blockrooms.item.components.ModDataComponents;
@@ -84,7 +85,7 @@ public class Blockrooms {
         event.put(ModEntities.BLOOD_ZOMBIE.get(), BloodZombie.createAttributes().build());
         event.put(ModEntities.SKELETON.get(), EnhancedSkeleton.createAttributes().build());
         event.put(ModEntities.BLACKSTONE_SHULKER.get(), Shulker.createAttributes().build());
-        event.put(ModEntities.SECRET_ENTITY_ONE.get(), net.minecraft.world.entity.monster.Vex.createAttributes().build());
+        event.put(ModEntities.SECRET_ENTITY_ONE.get(), SecretEntityOne.createAttributes().build());
         event.put(ModEntities.BLAST_ZOMBIE.get(), net.minecraft.world.entity.monster.zombie.Zombie.createAttributes().build());
         event.put(ModEntities.SCULK_CREEPER.get(), net.minecraft.world.entity.monster.Creeper.createAttributes().build());
     }

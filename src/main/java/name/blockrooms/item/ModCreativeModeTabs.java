@@ -55,6 +55,10 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.HEAT_INSULATION_CHESTPLATE);
                         output.accept(ModItems.HEAT_INSULATION_LEGGINGS);
                         output.accept(ModItems.HEAT_INSULATION_BOOTS);
+                        output.accept(ModItems.REVIVAL_HELMET);
+                        output.accept(ModItems.REVIVAL_CHESTPLATE);
+                        output.accept(ModItems.REVIVAL_LEGGINGS);
+                        output.accept(ModItems.REVIVAL_BOOTS);
                         output.accept(ModItems.BLOOD_ZOMBIE_SPAWN_EGG);
                         output.accept(ModItems.BLACKSTONE_SHULKER_SPAWN_EGG);
                     })

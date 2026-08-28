@@ -1,7 +1,8 @@
-{
-    "replace": false,
-    "values": [
-        "blockrooms:soul_alloy_chestplate",
-        "blockrooms:heat_insulation_chestplate"
-    ]
+﻿{
+    "replace":  false,
+    "values":  [
+                   "blockrooms:soul_alloy_chestplate",
+                   "blockrooms:heat_insulation_chestplate",
+                   "blockrooms:revival_chestplate"
+               ]
 }

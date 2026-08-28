@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "blockrooms:item/revival_boots"
+                 },
+    "parent":  "minecraft:item/generated"
+}

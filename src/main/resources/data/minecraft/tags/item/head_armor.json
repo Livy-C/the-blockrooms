@@ -1,7 +1,8 @@
-{
-    "replace": false,
-    "values": [
-        "blockrooms:soul_alloy_helmet",
-        "blockrooms:heat_insulation_helmet"
-    ]
+﻿{
+    "replace":  false,
+    "values":  [
+                   "blockrooms:soul_alloy_helmet",
+                   "blockrooms:heat_insulation_helmet",
+                   "blockrooms:revival_helmet"
+               ]
 }

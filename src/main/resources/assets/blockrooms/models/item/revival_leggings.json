@@ -1,0 +1,6 @@
+﻿{
+    "textures":  {
+                     "layer0":  "blockrooms:item/revival_leggings"
+                 },
+    "parent":  "minecraft:item/generated"
+}

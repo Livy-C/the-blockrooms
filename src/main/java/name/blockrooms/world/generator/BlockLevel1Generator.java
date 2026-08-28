@@ -184,29 +184,124 @@ public class BlockLevel1Generator extends BaseBlockLevelGenerator {
     }
 
 
+    /**
+     * 电梯竖井宿主只选大厅（LOBBY，且非植物房）。
+     * 竖井模板 9×22×9 会覆盖房间中央：营地/无人基地为实心或摆满家具的房间，
+     * 被挖穿会呈现"只生成一部分"；大厅中庭被竖井替换则是预期设计（电梯在大厅中央）。
+     * 植物房只有东西向开口，竖井会截断通道，也不选。
+     * 4×4 网格内若无可用大厅（极罕见）返回 null，该段不放电梯。
+     */
     public static BlockPos shaftCenter(long seed, int segment, int chunkX, int chunkZ) {
         int gx = Math.floorDiv(chunkX, SHAFT_GRID);
         int gz = Math.floorDiv(chunkZ, SHAFT_GRID);
         long base = hash3(seed, gx, gz, segment, 0x1B9L);
-        BlockPos candidate = null;
-        for (int attempt = 0; attempt < 8; attempt++) {
+        for (int attempt = 0; attempt < SHAFT_GRID * SHAFT_GRID; attempt++) {
             long h = base + attempt * 0x9E3779B97F4A7C15L;
             int cx = gx * SHAFT_GRID + (int) ((h >>> 16) % SHAFT_GRID);
             int cz = gz * SHAFT_GRID + (int) ((h >>> 32) % SHAFT_GRID);
-            candidate = new BlockPos(cx, 0, cz);
-            boolean blocked = false;
+            boolean usable = true;
             for (int f = 0; f < FLOORS_PER_SHAFT; f++) {
                 int fl = segment * FLOORS_PER_SHAFT + f;
                 if (fl >= FLOORS) break;
                 RoomType t = roomType(seed, fl, cx, cz);
-                if (t == RoomType.CORRIDOR || t == RoomType.GALLERY || t == RoomType.EXIT) {
-                    blocked = true;
+                if (t != RoomType.LOBBY
+                        || pickTemplate(seed, t, fl, cx, cz).equals(TPL_PLANT_ROOM)) {
+                    usable = false;
                     break;
                 }
             }
-            if (!blocked) return candidate;
+            if (usable) return new BlockPos(cx, 0, cz);
         }
-        return candidate;
+        return null;
+    }
+
+    /**
+     * 2 向房间（通廊/画廊/植物房/营地）的朝向选择：
+     * 1) 自然轴上同型邻居成链 → 保持自然朝向（链条贯通，开口相对）；
+     * 2) 否则按四邻可开口性打分，选连通面更多的朝向；
+     * 3) 平局回退自然朝向。
+     * 自然朝向：通廊/画廊/植物房为东西向（NONE），营地（实心+南北门）为南北向（NONE）。
+     * 注意：旋转映射按 naturalX 区分——营地要开东西向需 CLOCKWISE_90，开南北向保持 NONE。
+     */
+    private static Rotation pickRotation(long seed, int floor, int chunkX, int chunkZ,
+                                         RoomType type, boolean naturalX) {
+        if (type != RoomType.LOBBY && chainOnAxis(seed, floor, chunkX, chunkZ, type, naturalX)) {
+            return Rotation.NONE; // 链保持自然朝向（所有模板自然朝向均为 NONE）
+        }
+        int scoreX = axisScore(seed, floor, chunkX, chunkZ, true);
+        int scoreZ = axisScore(seed, floor, chunkX, chunkZ, false);
+        if (scoreX > scoreZ) return naturalX ? Rotation.NONE : Rotation.CLOCKWISE_90;     // 开东西向
+        if (scoreZ > scoreX) return naturalX ? Rotation.CLOCKWISE_90 : Rotation.NONE;     // 开南北向
+        return Rotation.NONE; // 平局回退自然朝向
+    }
+
+    /** 自然轴上（东西方向传 xAxis=true，南北传 false）是否有同型房间邻居可成链 */
+    private static boolean chainOnAxis(long seed, int floor, int chunkX, int chunkZ,
+                                       RoomType type, boolean xAxis) {
+        for (int sign = -1; sign <= 1; sign += 2) {
+            int nx = chunkX + (xAxis ? sign : 0);
+            int nz = chunkZ + (xAxis ? 0 : sign);
+            if (roomType(seed, floor, nx, nz) == type) return true;
+        }
+        return false;
+    }
+
+    /**
+     * 若本房间取某朝向（xAxis=true 为东西向），该轴两端邻居中有多少能对上开口。
+     * 只给确定性得分：4 向房间（大厅/无人基地）必连通 +2；
+     * 2 向房间只在其自然朝向与该轴匹配时 +2（走廊/画廊/植物房自然东西向，营地自然南北向）。
+     * 不给"异向邻居可能旋转过来"的不确定分——模拟显示那反而增加死路。
+     * 出口房间(实心盒)不计分。
+     */
+    private static int axisScore(long seed, int floor, int chunkX, int chunkZ, boolean xAxis) {
+        int score = 0;
+        for (int sign = -1; sign <= 1; sign += 2) {
+            int nx = chunkX + (xAxis ? sign : 0);
+            int nz = chunkZ + (xAxis ? 0 : sign);
+            RoomType t = roomType(seed, floor, nx, nz);
+            switch (t) {
+                case LOBBY -> {
+                    // 植物房 2 向（自然东西向）；其余大厅 4 向
+                    if (!pickTemplate(seed, t, floor, nx, nz).equals(TPL_PLANT_ROOM)) {
+                        score += 2;
+                    } else if (xAxis) {
+                        score += 2;
+                    }
+                }
+                case VAULT -> {
+                    // 无人基地 4 向；营地南北向自然
+                    if (pickTemplate(seed, t, floor, nx, nz).equals(TPL_UNMANNED)) {
+                        score += 2;
+                    } else if (!xAxis) {
+                        score += 2;
+                    }
+                }
+                case CORRIDOR, GALLERY -> {
+                    if (xAxis) score += 2;
+                }
+                default -> { }
+            }
+        }
+        return score;
+    }
+
+    /**
+     * 画廊模板只有 6 格深（16×6×6），居中偏移后把区块内两侧空隙
+     * （z=0..4 与 z=11..15，或旋转后 x 方向）补成方解石，避免侧面漏空成虚空。
+     */
+    private static void fillGallerySide(WorldGenLevel level, BlockPos origin, int baseY, boolean xAxis) {
+        BlockState calcite = Blocks.CALCITE.defaultBlockState();
+        int base = (xAxis ? origin.getX() : origin.getZ()) - 5; // 模板偏移前的起点
+        for (int strip : new int[]{0, 1, 2, 3, 4, 11, 12, 13, 14, 15}) {
+            for (int d = 0; d < 16; d++) {
+                for (int y = 0; y < 7; y++) {
+                    BlockPos p = xAxis
+                            ? new BlockPos(base + strip, baseY + y, origin.getZ() + d)
+                            : new BlockPos(origin.getX() + d, baseY + y, base + strip);
+                    level.setBlock(p, calcite, Block.UPDATE_NONE);
+                }
+            }
+        }
     }
 
 
@@ -302,19 +397,22 @@ public class BlockLevel1Generator extends BaseBlockLevelGenerator {
                     continue;
                 }
                 Identifier tpl = pickTemplate(seed, type, floor, cp.x, cp.z);
-                // 通廊朝向由邻居决定，避免"门对墙"死路：
-                // 东邻同型通廊 → 保持东西向（W 开口 E 门，链内开口相对、必然连通）；
-                // 否则转南北向（N/S 开口/门对着南北房间，通廊一定有出口）。
+                // 朝向由四邻开口情况决定（见 pickRotation），避免"门对墙"死路。
                 Rotation rotation = Rotation.NONE;
-                if (type == RoomType.CORRIDOR || type == RoomType.GALLERY) {
-                    RoomType east = roomType(seed, floor, cp.x + 1, cp.z);
-                    boolean chain = (type == RoomType.CORRIDOR && east == RoomType.CORRIDOR)
-                            || (type == RoomType.GALLERY && east == RoomType.GALLERY);
-                    if (!chain) {
-                        rotation = Rotation.CLOCKWISE_90;
-                    }
+                boolean twoWay = type == RoomType.CORRIDOR || type == RoomType.GALLERY
+                        || (type == RoomType.VAULT && tpl.equals(TPL_CAMP))
+                        || (type == RoomType.LOBBY && tpl.equals(TPL_PLANT_ROOM));
+                if (twoWay) {
+                    boolean naturalX = !tpl.equals(TPL_CAMP);
+                    rotation = pickRotation(seed, floor, cp.x, cp.z, type, naturalX);
                 }
                 BlockPos origin = new BlockPos(cp.getMinBlockX(), baseY, cp.getMinBlockZ());
+                if (tpl.equals(TPL_GALLERY)) {
+                    // 画廊模板 16×6×6，通道开口在 z=2,3：偏移 +5 使通道居中(z=7,8)与邻居开口对齐；
+                    // 旋转 90° 后开口落在 x=2,3，偏移 +5 在 X。
+                    origin = rotation == Rotation.NONE ? origin.offset(0, 0, 5) : origin.offset(5, 0, 0);
+                    fillGallerySide(level, origin, baseY, rotation == Rotation.CLOCKWISE_90);
+                }
                 placeTemplateLocal(level, chunk, tpl, origin, rotation);
             } catch (Exception e) {
                 Blockrooms.LOGGER.error("BL1-GEN: chunk {},{} floor {} EXCEPTION: {}", cp.x, cp.z, floor, e.toString());
@@ -329,7 +427,7 @@ public class BlockLevel1Generator extends BaseBlockLevelGenerator {
         int segments = (FLOORS + FLOORS_PER_SHAFT - 1) / FLOORS_PER_SHAFT;
         for (int segment = 0; segment < segments; segment++) {
             BlockPos center = shaftCenter(seed, segment, cp.x, cp.z);
-            if (center.getX() == cp.x && center.getZ() == cp.z) {
+            if (center != null && center.getX() == cp.x && center.getZ() == cp.z) {
                 int segY = segment * SHAFT_SEG_HEIGHT;
                 placeTemplateLocal(level, chunk, TPL_ELEVATOR,
                         new BlockPos(cp.getMinBlockX() + 3, segY, cp.getMinBlockZ() + 3), Rotation.NONE);
