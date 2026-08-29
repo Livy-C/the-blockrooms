@@ -3,7 +3,6 @@ package name.blockrooms.entity;
 import name.blockrooms.Blockrooms;
 import name.blockrooms.entity.projectiles.BlockProjectile;
 import name.blockrooms.entity.projectiles.ItemProjectile;
-import name.blockrooms.entity.secret.SecretEntityOne;
 import net.minecraft.core.registries.Registries;import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -39,13 +38,6 @@ public class ModEntities {
                     EntityType.Builder.of(BlackstoneShulker::new, MobCategory.MONSTER)
                             .sized(1.0F, 1.0F)
                             .clientTrackingRange(10)
-                            .build(entityId(id)));
-
-    public static final DeferredHolder<EntityType<?>, EntityType<SecretEntityOne>> SECRET_ENTITY_ONE =
-            ENTITY_TYPES.register("secret_entity_one", id ->
-                    EntityType.Builder.of(SecretEntityOne::new, MobCategory.MISC)
-                            .sized(0.4F, 0.8F)
-                            .clientTrackingRange(16)
                             .build(entityId(id)));
 
     public static final DeferredHolder<EntityType<?>, EntityType<BlastZombie>> BLAST_ZOMBIE =

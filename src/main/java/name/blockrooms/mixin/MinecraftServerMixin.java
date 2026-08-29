@@ -49,7 +49,8 @@ public class MinecraftServerMixin {
 
     @Unique
     private boolean blockrooms$noOneUnlocked() {
-        return this.playerList == null
-                || this.playerList.getPlayers().stream().noneMatch(SecretPlaceAccess::isUnlocked);
+        return false;
+//        return this.playerList == null
+//                || this.playerList.getPlayers().stream().noneMatch(SecretPlaceAccess::isUnlocked);
     }
 }

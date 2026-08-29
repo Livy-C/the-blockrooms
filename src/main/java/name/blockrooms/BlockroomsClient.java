@@ -5,10 +5,16 @@ import name.blockrooms.client.hud.LevelInfoLayer;
 import name.blockrooms.client.hud.TemperatureSensorLayer;
 import name.blockrooms.client.renderer.BlackstoneShulkerRenderer;
 import name.blockrooms.client.renderer.BlockProjectileRenderer;
+import name.blockrooms.client.renderer.BlockroomWillRenderer;
 import name.blockrooms.client.renderer.BloodZombieRenderer;
+import name.blockrooms.client.renderer.ChainRenderer;
 import name.blockrooms.client.renderer.ItemProjectileRenderer;
+import name.blockrooms.client.renderer.PlayerPuppetRenderer;
+import name.blockrooms.client.renderer.PuppetRenderer;
 import name.blockrooms.entity.ModEntities;
+import name.blockrooms.entity.secret.ModSecretEntities;
 import net.minecraft.client.renderer.entity.SkeletonRenderer;
+import net.minecraft.client.renderer.entity.ZombieRenderer;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -42,8 +48,10 @@ public class BlockroomsClient {
         event.registerEntityRenderer(ModEntities.SKELETON.get(), SkeletonRenderer::new);
         event.registerEntityRenderer(ModEntities.BLOOD_ZOMBIE.get(), BloodZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.BLACKSTONE_SHULKER.get(), BlackstoneShulkerRenderer::new);
-        event.registerEntityRenderer(ModEntities.SECRET_ENTITY_ONE.get(),
-                net.minecraft.client.renderer.entity.VexRenderer::new);
+        event.registerEntityRenderer(ModSecretEntities.BLOCKROOM_WILL.get(), BlockroomWillRenderer::new);
+        event.registerEntityRenderer(ModSecretEntities.CHAIN.get(), ChainRenderer::new);
+        event.registerEntityRenderer(ModSecretEntities.PUPPET.get(), PuppetRenderer::new);
+        event.registerEntityRenderer(ModSecretEntities.PLAYER_PUPPET.get(), PlayerPuppetRenderer::new);
         event.registerEntityRenderer(ModEntities.BLAST_ZOMBIE.get(),
                 net.minecraft.client.renderer.entity.ZombieRenderer::new);
         event.registerEntityRenderer(ModEntities.SCULK_CREEPER.get(),

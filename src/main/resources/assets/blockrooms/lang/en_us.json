@@ -49,6 +49,10 @@
   "item.blockrooms.revival_boots": "Revival Boots",
   "entity.blockrooms.blood_zombie": "Blood Zombie",
   "entity.blockrooms.blackstone_shulker": "Blackstone Shulker",
+  "entity.blockrooms.blockroom_will": "Blockroom Will",
+  "entity.blockrooms.chain": "Binding Chain",
+  "entity.blockrooms.puppet": "Puppet",
+  "entity.blockrooms.player_puppet": "Player Puppet",
   "effect.blockrooms.trembling": "Trembling",
 
   "key.blockrooms.noclipping": "Noclipping",

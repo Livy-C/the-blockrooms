@@ -15,7 +15,8 @@ public final class SecretPlaceAccess {
     }
 
     public static boolean isUnlocked(ServerPlayer player) {
-        return player.getPersistentData().getBooleanOr(UNLOCKED_TAG, false);
+        return true;
+        // return player.getPersistentData().getBooleanOr(UNLOCKED_TAG, false);
     }
 
     public static void unlock(ServerPlayer player) {

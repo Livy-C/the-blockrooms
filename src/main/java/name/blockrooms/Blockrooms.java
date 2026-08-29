@@ -9,7 +9,9 @@ import name.blockrooms.effect.ModMobEffects;
 import name.blockrooms.entity.BloodZombie;
 import name.blockrooms.entity.EnhancedSkeleton;
 import name.blockrooms.entity.ModEntities;
-import name.blockrooms.entity.secret.SecretEntityOne;
+import name.blockrooms.entity.secret.BlockroomWill;
+import name.blockrooms.entity.secret.ChainEntity;
+import name.blockrooms.entity.secret.Puppet;
 import name.blockrooms.item.ModCreativeModeTabs;
 import name.blockrooms.item.ModItems;
 import name.blockrooms.item.components.ModDataComponents;
@@ -60,6 +62,7 @@ public class Blockrooms {
         ModGenerators.register(modEventBus);
         ModDataComponents.register(modEventBus);
         ModEntities.register(modEventBus);
+        name.blockrooms.entity.secret.ModSecretEntities.register(modEventBus);
         ModStructures.register(modEventBus);
         ModLootConditions.register(modEventBus);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
@@ -85,9 +88,13 @@ public class Blockrooms {
         event.put(ModEntities.BLOOD_ZOMBIE.get(), BloodZombie.createAttributes().build());
         event.put(ModEntities.SKELETON.get(), EnhancedSkeleton.createAttributes().build());
         event.put(ModEntities.BLACKSTONE_SHULKER.get(), Shulker.createAttributes().build());
-        event.put(ModEntities.SECRET_ENTITY_ONE.get(), SecretEntityOne.createAttributes().build());
         event.put(ModEntities.BLAST_ZOMBIE.get(), net.minecraft.world.entity.monster.zombie.Zombie.createAttributes().build());
         event.put(ModEntities.SCULK_CREEPER.get(), net.minecraft.world.entity.monster.Creeper.createAttributes().build());
+        event.put(name.blockrooms.entity.secret.ModSecretEntities.BLOCKROOM_WILL.get(), BlockroomWill.createAttributes().build());
+        event.put(name.blockrooms.entity.secret.ModSecretEntities.CHAIN.get(), ChainEntity.createAttributes().build());
+        event.put(name.blockrooms.entity.secret.ModSecretEntities.PUPPET.get(), Puppet.createAttributes().build());
+        event.put(name.blockrooms.entity.secret.ModSecretEntities.PLAYER_PUPPET.get(),
+                net.minecraft.world.entity.player.Player.createAttributes().build());
     }
 
     @SubscribeEvent
