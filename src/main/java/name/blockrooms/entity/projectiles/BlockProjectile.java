@@ -11,8 +11,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -122,6 +124,16 @@ public class BlockProjectile extends ArrowLikeProjectile {
     @Override
     public void dropAndDiscard() {
         FallingBlockEntity.fall(this.level(), new BlockPos(this.getBlockX(), this.getBlockY(), this.getBlockZ()), this.getBlockState());
+
         this.discard();
+    }
+
+    private static void updateBlockEntityComponents(Level level, BlockPos poa, ItemStack stack) {
+        BlockEntity blockentity = level.getBlockEntity(poa);
+        if (blockentity != null) {
+            blockentity.applyComponentsFromItemStack(stack);
+            blockentity.setChanged();
+        }
+
     }
 }

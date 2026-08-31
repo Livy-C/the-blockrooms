@@ -9,6 +9,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityTravelToDimensionEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
@@ -28,6 +30,36 @@ public class BL15Handler {
                 sl.setDayTime(6000);
             }
         }
+    }
+
+    /**
+     * 拦截 BL15 → 末地的维度传送（原版 END_PORTAL 方块踩上即触发）。
+     * BL15 的末地传送门实际应把玩家送到另一座拱门顶部，
+     * 因此取消原版传送并手动传送到目标拱门。
+     */
+    @SubscribeEvent
+    public static void onTravelToEnd(EntityTravelToDimensionEvent event) {
+        // 只拦截"传送去末地"的情况
+        if (!event.getDimension().equals(ServerLevel.END)) {
+            return;
+        }
+        if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        ServerLevel level = (ServerLevel) player.level();
+        if (level.isClientSide() || !level.dimension().equals(ModLevels.BLOCKLEVEL_15)) {
+            return;
+        }
+        // 取消原版末地传送
+        event.setCanceled(true);
+        // 找到玩家脚下的传送门方块（容忍 1 格偏差）
+        BlockPos portalPos = player.blockPosition().below();
+        if (!level.getBlockState(portalPos).is(Blocks.END_PORTAL)) {
+            portalPos = player.blockPosition();
+        }
+        Vec3 target = portalTarget(level.getSeed(), portalPos);
+        player.teleportTo(level, target.x, target.y, target.z,
+                java.util.Set.of(), player.getYRot(), player.getXRot(), true);
     }
 
     @SubscribeEvent
@@ -65,5 +97,11 @@ public class BL15Handler {
         }
         BlockPos midTop = BlockLevel15Generator.archMidTop(seed, gx, gz);
         return new Vec3(midTop.getX() + 0.5, midTop.getY(), midTop.getZ() + 0.5);
+    }
+
+    public static void onPlayerTransform(PlayerEvent.PlayerChangedDimensionEvent event){
+        if(event.getFrom().equals(ModLevels.BLOCKLEVEL_15) && event.getFrom().equals(ServerLevel.END)){
+
+        }
     }
 }

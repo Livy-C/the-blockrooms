@@ -17,8 +17,6 @@ import net.minecraft.world.phys.Vec3;
 
 
 public class ChainEntity extends Mob {
-
-    /** 单次受击最大伤害（动态限伤） */
     public static final float MAX_HIT_DAMAGE = 100.0F;
     public static final double MAX_HEALTH = 2000.0D;
 
@@ -122,8 +120,7 @@ public class ChainEntity extends Mob {
     public java.util.UUID getOwnerBossId() {
         return this.ownerBossId;
     }
-
-    /** 动态限伤：单次最多 MAX_HIT_DAMAGE（1.21.11 hurt 为 final，用 actuallyHurt 实现） */
+    
     @Override
     protected void actuallyHurt(ServerLevel level, DamageSource source, float amount) {
         float capped = Math.min(amount, MAX_HIT_DAMAGE);
@@ -135,7 +132,6 @@ public class ChainEntity extends Mob {
 
     @Override
     public void die(DamageSource damageSource) {
-        // 通知 Boss 锁链断裂
         if (this.level() instanceof ServerLevel serverLevel && this.ownerBossId != null) {
             if (serverLevel.getEntity(this.ownerBossId) instanceof BlockroomWill boss) {
                 boss.onChainBroken(this);
@@ -143,8 +139,8 @@ public class ChainEntity extends Mob {
         }
         super.die(damageSource);
     }
-
-    /** 锁链每 tick 悬浮在原点（不移动、不重力、不碰撞） */
+    
+    
     @Override
     public void tick() {
         super.tick();

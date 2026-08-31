@@ -128,7 +128,7 @@ public class BlockLevel2Generator extends BaseBlockLevelGenerator {
                     Direction wallDir = wallDirection(level, p);
                     if (wallDir != null && level.getBlockState(p.above()).isAir()) {
                         level.setBlock(p.above(),
-                                Blocks.REDSTONE_WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, wallDir),
+                                Blocks.REDSTONE_WALL_TORCH.defaultBlockState().setValue(WallTorchBlock.FACING, wallDir.getOpposite()),
                                 Block.UPDATE_NONE);
                     }
                 }

@@ -7,4 +7,6 @@ public class BaseMobEffect extends MobEffect {
     protected BaseMobEffect(MobEffectCategory category, int color) {
         super(category, color);
     }
+
+
 }
